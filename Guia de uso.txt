@@ -1,0 +1,17 @@
+passo 1: usar o comando "pip install -r requirements.txt" no terminal para baixar todas as bibliotecas necessárias
+
+passo 2: colocar o arquivo "credentials.json" na pasta "Data"
+
+passo 3: editar a planilha de clientes
+
+passo 4: entrar no arquivo "main.py"
+
+passo 5: clicar no play no canto superior direito do navegador
+
+passo 6: clicar com o botão direito do mouse em um dos arquivos pdf gerados com o nome "entregas_(data).pdf"
+
+passo 7: clicar em baixar no menu suspenso
+
+passo 8: abrir o arquivo
+
+passo 9: conferir se deu certo
