@@ -25,4 +25,4 @@ def save_sheet(sheet_name, credentials_path="./Data/credentials.json", file_name
 
     # Salve o DataFrame como uma planilha Excel local
     df.to_excel(f"./Data/{file_name}", index=False)
-    print(f"Planilha salva como {file_name}")
+    print(f"planilha salva como {file_name}")

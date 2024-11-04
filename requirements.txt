@@ -1,0 +1,6 @@
+oauth2client
+gspread
+pandas
+openpyxl
+reportlab
+fpdf

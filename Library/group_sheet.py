@@ -34,7 +34,12 @@ def group_customers_by_cep(dictionary):
             if address_info:
                 city = address_info.get('localidade')
                 neighborhood = address_info.get('bairro')
-
+                
+                # Formata o endereço completo
+                numero_casa = client.get("N° Casa/Ap")
+                endereco_completo = f"{address_info.get('logradouro')}, {numero_casa} - {neighborhood}, {city} - {address_info.get('uf')}, {address_info.get('cep')}"
+                client['endereco'] = endereco_completo
+                
                 # Adiciona os dados do cliente, incluindo informações do endereço
                 client_with_address = {**client, **address_info}
 
@@ -46,4 +51,5 @@ def group_customers_by_cep(dictionary):
 def group_all(sheet):
     grouped_sheet = group_customers_by_date(sheet)
     grouped_sheet = group_customers_by_cep(grouped_sheet)
+    print("planilha agrupada")
     return grouped_sheet
