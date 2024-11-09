@@ -10,7 +10,7 @@ def create_pdfs(client_data):
     # Iterar sobre as datas e criar os PDFs
     for delivery_date in date_range:
         # Formatar a data para comparação com as chaves do dicionário
-        formatted_date = delivery_date.strftime("%m/%d/%Y")
+        formatted_date = delivery_date.strftime("%d/%m/%Y")
         
         # Verifica se há dados para a data atual
         if formatted_date not in client_data:

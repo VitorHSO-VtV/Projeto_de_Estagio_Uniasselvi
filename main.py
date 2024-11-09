@@ -13,4 +13,7 @@ route = make_route.make_best_routes(grouped_sheet, "Rua Orlando Odilio Koerich, 
 with open("Data/file2.json", "w") as file:
     json.dump(route, file, indent=4)  # `indent=4` organiza o JSON para melhor legibilidade
 
+'''with open("Data/file3.json", "w") as file:
+    json.dump(a, file, indent=4)  # `indent=4` organiza o JSON para melhor legibilidade'''
+
 export_pdf.create_pdfs(route)

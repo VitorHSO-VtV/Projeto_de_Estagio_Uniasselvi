@@ -31,7 +31,7 @@ def save_sheet(sheet_name, credentials_path="./Data/credentials.json", file_name
     # Obtenha todos os dados a partir da segunda linha
     try:
         print("\033[34mObtendo dados da planilha...\033[0m")  # Amarelo para indicar a busca de dados
-        data = worksheet.get_all_records(head=2)
+        data = worksheet.get_all_records(head=3)
     except Exception as e:
         print(f"\033[31mErro ao obter dados da planilha: {e}\033[0m")  # Vermelho para erro
         return
