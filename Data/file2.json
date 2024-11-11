@@ -1,522 +1,202 @@
 {
-    "08/11/2024": {
+    "11/11/2024": {
         "manh\u00e3": [
             {
-                "endereco": "Rua Irm\u00e3os Vieira, 98 - Campinas, S\u00e3o Jos\u00e9 - SC, 88101-290",
+                "endereco": "Rua Maria Ribeiro da Silva, 66 - Bela Vista, Palho\u00e7a - SC, 88135-545",
                 "cliente": "Desconhecido",
-                "pedido": "11112",
-                "tempo_do_anterior_para_o_atual": 8.983333333333333,
-                "tempo_total_acumulado": 8.983333333333333,
+                "pedido": "11080",
+                "tempo_de_viagem": 8.166666666666666,
+                "tempo_de_montagem": 20.0,
+                "tempo_total_cliente": 28.166666666666664,
+                "tempo_total_acumulado": 28.166666666666664,
                 "status": "Pendente"
             },
             {
-                "endereco": "Rua Moura, 54 - Barreiros, S\u00e3o Jos\u00e9 - SC, 88117-250",
+                "endereco": "Rua Nossa Senhora de F\u00e1tima, 47 - Ariri\u00fa, Palho\u00e7a - SC, 88135-460",
                 "cliente": "Desconhecido",
-                "pedido": "11068",
-                "tempo_do_anterior_para_o_atual": 9.266666666666667,
-                "tempo_total_acumulado": 18.25,
+                "pedido": "11061",
+                "tempo_de_viagem": 17.55,
+                "tempo_de_montagem": 20.0,
+                "tempo_total_cliente": 37.55,
+                "tempo_total_acumulado": 65.71666666666667,
                 "status": "Pendente"
             },
             {
-                "endereco": "Rua Treze T\u00edlias, 31 - Areias de Cima (Guaporanga), Bigua\u00e7u - SC, 88168-704",
+                "endereco": "Rua Delfim Ribeiro, 69 - Brejar\u00fa, Palho\u00e7a - SC, 88133-660",
                 "cliente": "Desconhecido",
-                "pedido": "11045",
-                "tempo_do_anterior_para_o_atual": 23.8,
-                "tempo_total_acumulado": 42.05,
+                "pedido": "11083",
+                "tempo_de_viagem": 19.2,
+                "tempo_de_montagem": 20.0,
+                "tempo_total_cliente": 39.2,
+                "tempo_total_acumulado": 104.91666666666667,
                 "status": "Pendente"
             },
             {
-                "endereco": "Rua Leopoldo da Silva, 16 - Areias de Cima (Guaporanga), Bigua\u00e7u - SC, 88168-665",
+                "endereco": "Rua Vereador M\u00e1rio Coelho Pires, 97 - Campinas, S\u00e3o Jos\u00e9 - SC, 88101-280",
                 "cliente": "Desconhecido",
-                "pedido": "11030",
-                "tempo_do_anterior_para_o_atual": 0.9666666666666667,
-                "tempo_total_acumulado": 43.016666666666666,
+                "pedido": "11111",
+                "tempo_de_viagem": 14.0,
+                "tempo_de_montagem": 20.0,
+                "tempo_total_cliente": 34.0,
+                "tempo_total_acumulado": 138.91666666666669,
+                "status": "Pendente"
+            },
+            {
+                "endereco": "Rua Osni Jo\u00e3o Vieira, 96 - Campinas, S\u00e3o Jos\u00e9 - SC, 88101-270",
+                "cliente": "Desconhecido",
+                "pedido": "11110",
+                "tempo_de_viagem": 3.1166666666666667,
+                "tempo_de_montagem": 20.0,
+                "tempo_total_cliente": 23.116666666666667,
+                "tempo_total_acumulado": 162.03333333333336,
+                "status": "Pendente"
+            },
+            {
+                "endereco": "Avenida Marechal Castelo Branco, 93 - Campinas, S\u00e3o Jos\u00e9 - SC, 88101-020",
+                "cliente": "Desconhecido",
+                "pedido": "11107",
+                "tempo_de_viagem": 3.466666666666667,
+                "tempo_de_montagem": 20.0,
+                "tempo_total_cliente": 23.46666666666667,
+                "tempo_total_acumulado": 185.50000000000003,
                 "status": "Pendente"
             },
             {
                 "endereco": "Rua Orlando Odilio Koerich, SN Galp\u00e3o II - Picadas do Sul, S\u00e3o Jos\u00e9 - SC, 88102-106",
                 "cliente": "Ponto de Partida",
                 "pedido": "Retorno",
-                "tempo_do_anterior_para_o_atual": 23.083333333333332,
-                "tempo_total_acumulado": 43.016666666666666,
+                "tempo_de_viagem": 9.05,
+                "tempo_de_montagem": 0,
+                "tempo_total_cliente": 9.05,
+                "tempo_total_acumulado": 194.55000000000004,
                 "status": "Retorno ao ponto de partida"
             }
         ],
         "tarde": [
             {
+                "endereco": "Rua Francisco Belmiro, 108 - Capoeiras, Florian\u00f3polis - SC, 88070-550",
+                "cliente": "Desconhecido",
+                "pedido": "11122",
+                "tempo_de_viagem": 27.55,
+                "tempo_de_montagem": 50.0,
+                "tempo_total_cliente": 77.55,
+                "tempo_total_acumulado": 77.55,
+                "status": "Pendente"
+            },
+            {
+                "endereco": "Rua Agapito Veloso, 107 - Canto, Florian\u00f3polis - SC, 88075-580",
+                "cliente": "Desconhecido",
+                "pedido": "11121",
+                "tempo_de_viagem": 27.483333333333334,
+                "tempo_de_montagem": 50.0,
+                "tempo_total_cliente": 77.48333333333333,
+                "tempo_total_acumulado": 155.03333333333333,
+                "status": "Pendente"
+            },
+            {
+                "endereco": "Rua Ca\u00e7ador, 25 - Areias de Cima (Guaporanga), Bigua\u00e7u - SC, 88168-692",
+                "cliente": "Desconhecido",
+                "pedido": "11039",
+                "tempo_de_viagem": 30.033333333333335,
+                "tempo_de_montagem": 50.0,
+                "tempo_total_cliente": 80.03333333333333,
+                "tempo_total_acumulado": 235.06666666666666,
+                "status": "Pendente"
+            },
+            {
                 "endereco": "Rua Orlando Odilio Koerich, SN Galp\u00e3o II - Picadas do Sul, S\u00e3o Jos\u00e9 - SC, 88102-106",
                 "cliente": "Ponto de Partida",
                 "pedido": "Retorno",
-                "tempo_do_anterior_para_o_atual": 0.0,
-                "tempo_total_acumulado": 0,
+                "tempo_de_viagem": 23.3,
+                "tempo_de_montagem": 0,
+                "tempo_total_cliente": 23.3,
+                "tempo_total_acumulado": 258.3666666666667,
                 "status": "Retorno ao ponto de partida"
             }
         ]
     },
-    "09/11/2024": {
+    "12/11/2024": {
         "manh\u00e3": [
             {
-                "endereco": "Avenida Ivo Lucchi, 70 - Brejar\u00fa, Palho\u00e7a - SC, 88133-900",
+                "endereco": "Rua Dom Pedro II, 100 - Campinas, S\u00e3o Jos\u00e9 - SC, 88101-320",
                 "cliente": "Desconhecido",
-                "pedido": "11084",
-                "tempo_do_anterior_para_o_atual": 3.816666666666667,
-                "tempo_total_acumulado": 3.816666666666667,
+                "pedido": "11114",
+                "tempo_de_viagem": 38.63333333333333,
+                "tempo_de_montagem": 20.0,
+                "tempo_total_cliente": 58.63333333333333,
+                "tempo_total_acumulado": 58.63333333333333,
                 "status": "Pendente"
             },
             {
-                "endereco": "Rua Treze de Maio, 68 - Brejar\u00fa, Palho\u00e7a - SC, 88133-650",
+                "endereco": "Rua Jo\u00e3o Raitz, 73 - Cachoeiras (Guaporanga), Bigua\u00e7u - SC, 88168-560",
                 "cliente": "Desconhecido",
-                "pedido": "11082",
-                "tempo_do_anterior_para_o_atual": 3.7,
-                "tempo_total_acumulado": 7.5166666666666675,
+                "pedido": "11087",
+                "tempo_de_viagem": 35.18333333333333,
+                "tempo_de_montagem": 20.0,
+                "tempo_total_cliente": 55.18333333333333,
+                "tempo_total_acumulado": 113.81666666666666,
                 "status": "Pendente"
             },
             {
-                "endereco": "Rua Fermino Alo\u00edsio Brant, 67 - Brejar\u00fa, Palho\u00e7a - SC, 88133-570",
+                "endereco": "Rua Cipriane Sim\u00e3o, 88 - Cachoeiras (Guaporanga), Bigua\u00e7u - SC, 88168-636",
                 "cliente": "Desconhecido",
-                "pedido": "11081",
-                "tempo_do_anterior_para_o_atual": 5.516666666666667,
-                "tempo_total_acumulado": 13.033333333333335,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Juscelino Kubitschek, 102 - Campinas, S\u00e3o Jos\u00e9 - SC, 88117-125",
-                "cliente": "Desconhecido",
-                "pedido": "11116",
-                "tempo_do_anterior_para_o_atual": 13.0,
-                "tempo_total_acumulado": 26.033333333333335,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Domingos Andr\u00e9 Zanini, 103 - Campinas, S\u00e3o Jos\u00e9 - SC, 88117-200",
-                "cliente": "Desconhecido",
-                "pedido": "11117",
-                "tempo_do_anterior_para_o_atual": 4.3,
-                "tempo_total_acumulado": 30.333333333333336,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Angelina, 58 - Bela Vista, S\u00e3o Jos\u00e9 - SC, 88110-150",
-                "cliente": "Desconhecido",
-                "pedido": "11072",
-                "tempo_do_anterior_para_o_atual": 7.266666666666667,
-                "tempo_total_acumulado": 37.6,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Avenida Santa Catarina, 49 - Balne\u00e1rio, Florian\u00f3polis - SC, 88075-500",
-                "cliente": "Desconhecido",
-                "pedido": "11063",
-                "tempo_do_anterior_para_o_atual": 11.8,
-                "tempo_total_acumulado": 49.400000000000006,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Servid\u00e3o Santa Vit\u00f3ria, 11 - Agron\u00f4mica, Florian\u00f3polis - SC, 88025-525",
-                "cliente": "Desconhecido",
-                "pedido": "11025",
-                "tempo_do_anterior_para_o_atual": 16.116666666666667,
-                "tempo_total_acumulado": 65.51666666666668,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Doutor Jo\u00e3o de Oliveira, 105 - Canasvieiras, Florian\u00f3polis - SC, 88054-121",
-                "cliente": "Desconhecido",
-                "pedido": "11119",
-                "tempo_do_anterior_para_o_atual": 24.416666666666668,
-                "tempo_total_acumulado": 89.93333333333335,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Henrique Jos\u00e9 da Silva, 44 - Ariri\u00fa, Palho\u00e7a - SC, 88135-180",
-                "cliente": "Desconhecido",
-                "pedido": "11058",
-                "tempo_do_anterior_para_o_atual": 47.65,
-                "tempo_total_acumulado": 137.58333333333334,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Cristian da Silva Alexandre, 46 - Ariri\u00fa, Palho\u00e7a - SC, 88135-272",
-                "cliente": "Desconhecido",
-                "pedido": "11060",
-                "tempo_do_anterior_para_o_atual": 1.9833333333333334,
-                "tempo_total_acumulado": 139.56666666666666,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Hugolino Francisco Duarte, 12 - Alto Ariri\u00fa, Palho\u00e7a - SC, 88135-766",
-                "cliente": "Desconhecido",
-                "pedido": "11026",
-                "tempo_do_anterior_para_o_atual": 6.933333333333334,
-                "tempo_total_acumulado": 146.5,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Carlos Steinmetz, 51 - Barra do Ariri\u00fa, Palho\u00e7a - SC, 88134-409",
-                "cliente": "Desconhecido",
-                "pedido": "11065",
-                "tempo_do_anterior_para_o_atual": 12.233333333333333,
-                "tempo_total_acumulado": 158.73333333333332,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Jo\u00e3o Carlos Esp\u00edndola, 50 - Barra do Ariri\u00fa, Palho\u00e7a - SC, 88134-407",
-                "cliente": "Desconhecido",
-                "pedido": "11064",
-                "tempo_do_anterior_para_o_atual": 1.8,
-                "tempo_total_acumulado": 160.53333333333333,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Ezequiel Simas Fernandes, 38 - Areias de Cima (Guaporanga), Bigua\u00e7u - SC, 88168-734",
-                "cliente": "Desconhecido",
-                "pedido": "11052",
-                "tempo_do_anterior_para_o_atual": 34.05,
-                "tempo_total_acumulado": 194.58333333333331,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Cambori\u00fa, 33 - Areias de Cima (Guaporanga), Bigua\u00e7u - SC, 88168-708",
-                "cliente": "Desconhecido",
-                "pedido": "11047",
-                "tempo_do_anterior_para_o_atual": 1.7333333333333334,
-                "tempo_total_acumulado": 196.31666666666663,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Joinville, 24 - Areias de Cima (Guaporanga), Bigua\u00e7u - SC, 88168-690",
-                "cliente": "Desconhecido",
-                "pedido": "11038",
-                "tempo_do_anterior_para_o_atual": 1.7,
-                "tempo_total_acumulado": 198.01666666666662,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Servid\u00e3o Walmir Herc\u00edlio Garcia, 77 - Cachoeiras (Guaporanga), Bigua\u00e7u - SC, 88168-614",
-                "cliente": "Desconhecido",
-                "pedido": "11091",
-                "tempo_do_anterior_para_o_atual": 3.3,
-                "tempo_total_acumulado": 201.31666666666663,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Ant\u00f4nio Jos\u00e9 Garcia, 15 - Areias de Cima (Guaporanga), Bigua\u00e7u - SC, 88168-660",
-                "cliente": "Desconhecido",
-                "pedido": "11029",
-                "tempo_do_anterior_para_o_atual": 1.4833333333333334,
-                "tempo_total_acumulado": 202.79999999999995,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Sebasti\u00e3o Albino, 81 - Cachoeiras (Guaporanga), Bigua\u00e7u - SC, 88168-622",
-                "cliente": "Desconhecido",
-                "pedido": "11095",
-                "tempo_do_anterior_para_o_atual": 1.9333333333333333,
-                "tempo_total_acumulado": 204.7333333333333,
+                "pedido": "11102",
+                "tempo_de_viagem": 46.233333333333334,
+                "tempo_de_montagem": 20.0,
+                "tempo_total_cliente": 66.23333333333333,
+                "tempo_total_acumulado": 180.05,
                 "status": "Pendente"
             },
             {
                 "endereco": "Rua Orlando Odilio Koerich, SN Galp\u00e3o II - Picadas do Sul, S\u00e3o Jos\u00e9 - SC, 88102-106",
                 "cliente": "Ponto de Partida",
                 "pedido": "Retorno",
-                "tempo_do_anterior_para_o_atual": 23.983333333333334,
-                "tempo_total_acumulado": 204.73333333333332,
+                "tempo_de_viagem": 29.433333333333334,
+                "tempo_de_montagem": 0,
+                "tempo_total_cliente": 29.433333333333334,
+                "tempo_total_acumulado": 209.48333333333335,
                 "status": "Retorno ao ponto de partida"
             }
         ],
         "tarde": [
             {
-                "endereco": "Rua Urubici, 23 - Areias de Cima (Guaporanga), Bigua\u00e7u - SC, 88168-688",
+                "endereco": "Rua Santa Marta, 63 - Bela Vista, Palho\u00e7a - SC, 88132-712",
                 "cliente": "Desconhecido",
-                "pedido": "11037",
-                "tempo_do_anterior_para_o_atual": 30.4,
-                "tempo_total_acumulado": 30.4,
+                "pedido": "11077",
+                "tempo_de_viagem": 38.63333333333333,
+                "tempo_de_montagem": 20.0,
+                "tempo_total_cliente": 58.63333333333333,
+                "tempo_total_acumulado": 58.63333333333333,
                 "status": "Pendente"
             },
             {
-                "endereco": "Rua Ararangu\u00e1, 26 - Areias de Cima (Guaporanga), Bigua\u00e7u - SC, 88168-694",
+                "endereco": "Rua Jos\u00e9 Clemente de Macedo, 64 - Bela Vista, Palho\u00e7a - SC, 88132-740",
                 "cliente": "Desconhecido",
-                "pedido": "11040",
-                "tempo_do_anterior_para_o_atual": 0.0,
-                "tempo_total_acumulado": 30.4,
+                "pedido": "11078",
+                "tempo_de_viagem": 45.916666666666664,
+                "tempo_de_montagem": 20.0,
+                "tempo_total_cliente": 65.91666666666666,
+                "tempo_total_acumulado": 124.54999999999998,
                 "status": "Pendente"
             },
             {
-                "endereco": "Rua Ol\u00edvio Rafael Schula, 42 - Areias de Cima (Guaporanga), Bigua\u00e7u - SC, 88168-742",
+                "endereco": "Avenida Paulo Roberto Vidal, 61 - Bela Vista, Palho\u00e7a - SC, 88132-599",
                 "cliente": "Desconhecido",
-                "pedido": "11056",
-                "tempo_do_anterior_para_o_atual": 0.0,
-                "tempo_total_acumulado": 30.4,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Servid\u00e3o das Pitangas, 92 - Campeche, Florian\u00f3polis - SC, 88063-320",
-                "cliente": "Desconhecido",
-                "pedido": "11106",
-                "tempo_do_anterior_para_o_atual": 49.983333333333334,
-                "tempo_total_acumulado": 80.38333333333333,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Orlando Odilio Koerich, SN Galp\u00e3o II - Picadas do Sul, S\u00e3o Jos\u00e9 - SC, 88102-106",
-                "cliente": "Ponto de Partida",
-                "pedido": "Retorno",
-                "tempo_do_anterior_para_o_atual": 30.633333333333333,
-                "tempo_total_acumulado": 80.38333333333333,
-                "status": "Retorno ao ponto de partida"
-            }
-        ]
-    },
-    "10/11/2024": {
-        "manh\u00e3": [
-            {
-                "endereco": "Avenida Bom Jesus de Nazar\u00e9, 43 - Ariri\u00fa, Palho\u00e7a - SC, 88135-100",
-                "cliente": "Desconhecido",
-                "pedido": "11057",
-                "tempo_do_anterior_para_o_atual": 6.233333333333333,
-                "tempo_total_acumulado": 6.233333333333333,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Avenida Valfride Vieira Martins, 62 - Bela Vista, Palho\u00e7a - SC, 88132-704",
-                "cliente": "Desconhecido",
-                "pedido": "11076",
-                "tempo_do_anterior_para_o_atual": 3.033333333333333,
-                "tempo_total_acumulado": 9.266666666666666,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Maria Bas\u00edlio, 65 - Bela Vista, Palho\u00e7a - SC, 88132-856",
-                "cliente": "Desconhecido",
-                "pedido": "11079",
-                "tempo_do_anterior_para_o_atual": 6.966666666666667,
-                "tempo_total_acumulado": 16.233333333333334,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Dezesseis de Julho, 89 - Caminho Novo, Palho\u00e7a - SC, 88132-370",
-                "cliente": "Desconhecido",
-                "pedido": "11103",
-                "tempo_do_anterior_para_o_atual": 8.6,
-                "tempo_total_acumulado": 24.833333333333336,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua 104, 90 - Caminho Novo, Palho\u00e7a - SC, 88132-591",
-                "cliente": "Desconhecido",
-                "pedido": "11104",
-                "tempo_do_anterior_para_o_atual": 2.8666666666666667,
-                "tempo_total_acumulado": 27.700000000000003,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Elizeu di Bernardi, 94 - Campinas, S\u00e3o Jos\u00e9 - SC, 88101-050",
-                "cliente": "Desconhecido",
-                "pedido": "11108",
-                "tempo_do_anterior_para_o_atual": 13.616666666666667,
-                "tempo_total_acumulado": 41.31666666666667,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Avenida Josu\u00e9 di Bernardi, 95 - Campinas, S\u00e3o Jos\u00e9 - SC, 88101-200",
-                "cliente": "Desconhecido",
-                "pedido": "11109",
-                "tempo_do_anterior_para_o_atual": 4.016666666666667,
-                "tempo_total_acumulado": 45.333333333333336,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Papa Jo\u00e3o XXIII, 101 - Campinas, S\u00e3o Jos\u00e9 - SC, 88101-340",
-                "cliente": "Desconhecido",
-                "pedido": "11115",
-                "tempo_do_anterior_para_o_atual": 3.8,
-                "tempo_total_acumulado": 49.13333333333333,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Frei Hil\u00e1rio, 99 - Campinas, S\u00e3o Jos\u00e9 - SC, 88101-310",
-                "cliente": "Desconhecido",
-                "pedido": "11113",
-                "tempo_do_anterior_para_o_atual": 1.9166666666666667,
-                "tempo_total_acumulado": 51.05,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Renato Ramos da Silva, 53 - Barreiros, S\u00e3o Jos\u00e9 - SC, 88110-015",
-                "cliente": "Desconhecido",
-                "pedido": "11067",
-                "tempo_do_anterior_para_o_atual": 8.0,
-                "tempo_total_acumulado": 59.05,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Jos\u00e9 Victor da Rosa, 55 - Barreiros, S\u00e3o Jos\u00e9 - SC, 88117-405",
-                "cliente": "Desconhecido",
-                "pedido": "11069",
-                "tempo_do_anterior_para_o_atual": 2.316666666666667,
-                "tempo_total_acumulado": 61.36666666666667,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua das Violetas, 60 - Bela Vista, S\u00e3o Jos\u00e9 - SC, 88110-826",
-                "cliente": "Desconhecido",
-                "pedido": "11074",
-                "tempo_do_anterior_para_o_atual": 5.733333333333333,
-                "tempo_total_acumulado": 67.1,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Manoel Eduardo Cardoso, 59 - Bela Vista, S\u00e3o Jos\u00e9 - SC, 88110-792",
-                "cliente": "Desconhecido",
-                "pedido": "11073",
-                "tempo_do_anterior_para_o_atual": 4.633333333333334,
-                "tempo_total_acumulado": 71.73333333333333,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Ant\u00f4nio Fran\u00e7a, 14 - Areias, S\u00e3o Jos\u00e9 - SC, 88113-655",
-                "cliente": "Desconhecido",
-                "pedido": "11028",
-                "tempo_do_anterior_para_o_atual": 8.3,
-                "tempo_total_acumulado": 80.03333333333333,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua \u00c1lvaro Medeiros Santiago, 13 - Areias, S\u00e3o Jos\u00e9 - SC, 88113-600",
-                "cliente": "Desconhecido",
-                "pedido": "11027",
-                "tempo_do_anterior_para_o_atual": 1.5166666666666666,
-                "tempo_total_acumulado": 81.55,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua General Liberato Bittencourt, 48 - Balne\u00e1rio, Florian\u00f3polis - SC, 88075-400",
-                "cliente": "Desconhecido",
-                "pedido": "11062",
-                "tempo_do_anterior_para_o_atual": 12.733333333333333,
-                "tempo_total_acumulado": 94.28333333333333,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Diogo de Botelho, 52 - Barra do Ariri\u00fa, Palho\u00e7a - SC, 88134-434",
-                "cliente": "Desconhecido",
-                "pedido": "11066",
-                "tempo_do_anterior_para_o_atual": 25.116666666666667,
-                "tempo_total_acumulado": 119.4,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Tr\u00eas Riachos, 34 - Areias de Cima (Guaporanga), Bigua\u00e7u - SC, 88168-710",
-                "cliente": "Desconhecido",
-                "pedido": "11048",
-                "tempo_do_anterior_para_o_atual": 37.266666666666666,
-                "tempo_total_acumulado": 156.66666666666669,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Itaja\u00ed, 30 - Areias de Cima (Guaporanga), Bigua\u00e7u - SC, 88168-702",
-                "cliente": "Desconhecido",
-                "pedido": "11044",
-                "tempo_do_anterior_para_o_atual": 0.5,
-                "tempo_total_acumulado": 157.16666666666669,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Geral Jardim Carolina, 19 - Areias de Cima (Guaporanga), Bigua\u00e7u - SC, 88168-680",
-                "cliente": "Desconhecido",
-                "pedido": "11033",
-                "tempo_do_anterior_para_o_atual": 1.0166666666666666,
-                "tempo_total_acumulado": 158.18333333333337,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Alexandre Marcelino, 17 - Areias de Cima (Guaporanga), Bigua\u00e7u - SC, 88168-670",
-                "cliente": "Desconhecido",
-                "pedido": "11031",
-                "tempo_do_anterior_para_o_atual": 1.3666666666666667,
-                "tempo_total_acumulado": 159.55000000000004,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Caramuru Garcia, 86 - Cachoeiras (Guaporanga), Bigua\u00e7u - SC, 88168-632",
-                "cliente": "Desconhecido",
-                "pedido": "11100",
-                "tempo_do_anterior_para_o_atual": 2.25,
-                "tempo_total_acumulado": 161.80000000000004,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Gustavo Justino R\u00e9is, 79 - Cachoeiras (Guaporanga), Bigua\u00e7u - SC, 88168-618",
-                "cliente": "Desconhecido",
-                "pedido": "11093",
-                "tempo_do_anterior_para_o_atual": 1.05,
-                "tempo_total_acumulado": 162.85000000000005,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Ant\u00f4nio Jos\u00e9 Garcia, 75 - Cachoeiras (Guaporanga), Bigua\u00e7u - SC, 88168-610",
-                "cliente": "Desconhecido",
-                "pedido": "11089",
-                "tempo_do_anterior_para_o_atual": 1.45,
-                "tempo_total_acumulado": 164.30000000000004,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Brasil\u00edcio Braga dos Reis, 76 - Cachoeiras (Guaporanga), Bigua\u00e7u - SC, 88168-612",
-                "cliente": "Desconhecido",
-                "pedido": "11090",
-                "tempo_do_anterior_para_o_atual": 1.2333333333333334,
-                "tempo_total_acumulado": 165.53333333333336,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Imbituba, 22 - Areias de Cima (Guaporanga), Bigua\u00e7u - SC, 88168-686",
-                "cliente": "Desconhecido",
-                "pedido": "11036",
-                "tempo_do_anterior_para_o_atual": 9.933333333333334,
-                "tempo_total_acumulado": 175.4666666666667,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua I\u00e7ara, 27 - Areias de Cima (Guaporanga), Bigua\u00e7u - SC, 88168-696",
-                "cliente": "Desconhecido",
-                "pedido": "11041",
-                "tempo_do_anterior_para_o_atual": 0.0,
-                "tempo_total_acumulado": 175.4666666666667,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rua Crici\u00fama, 35 - Areias de Cima (Guaporanga), Bigua\u00e7u - SC, 88168-712",
-                "cliente": "Desconhecido",
-                "pedido": "11049",
-                "tempo_do_anterior_para_o_atual": 0.0,
-                "tempo_total_acumulado": 175.4666666666667,
-                "status": "Pendente"
-            },
-            {
-                "endereco": "Rodovia BR-101, 74 - Cachoeiras (Guaporanga), Bigua\u00e7u - SC, 88168-562",
-                "cliente": "Desconhecido",
-                "pedido": "11088",
-                "tempo_do_anterior_para_o_atual": 33.266666666666666,
-                "tempo_total_acumulado": 208.73333333333335,
+                "pedido": "11075",
+                "tempo_de_viagem": 44.93333333333333,
+                "tempo_de_montagem": 20.0,
+                "tempo_total_cliente": 64.93333333333334,
+                "tempo_total_acumulado": 189.48333333333332,
                 "status": "Pendente"
             },
             {
                 "endereco": "Rua Orlando Odilio Koerich, SN Galp\u00e3o II - Picadas do Sul, S\u00e3o Jos\u00e9 - SC, 88102-106",
                 "cliente": "Ponto de Partida",
                 "pedido": "Retorno",
-                "tempo_do_anterior_para_o_atual": 56.833333333333336,
-                "tempo_total_acumulado": 208.73333333333332,
-                "status": "Retorno ao ponto de partida"
-            }
-        ],
-        "tarde": [
-            {
-                "endereco": "Rua Orlando Odilio Koerich, SN Galp\u00e3o II - Picadas do Sul, S\u00e3o Jos\u00e9 - SC, 88102-106",
-                "cliente": "Ponto de Partida",
-                "pedido": "Retorno",
-                "tempo_do_anterior_para_o_atual": 0.0,
-                "tempo_total_acumulado": 0,
+                "tempo_de_viagem": 18.716666666666665,
+                "tempo_de_montagem": 0,
+                "tempo_total_cliente": 18.716666666666665,
+                "tempo_total_acumulado": 208.2,
                 "status": "Retorno ao ponto de partida"
             }
         ]
