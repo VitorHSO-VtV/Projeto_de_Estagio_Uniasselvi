@@ -2,7 +2,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
 
-def save_sheet(sheet_name, credentials_path="./Data/credentials.json", file_name="planilha_local.xlsx"):
+def save_sheet(sheet_name, credentials_path="./Data/credentials.json", file_name="nova_planilha_local.xlsx"):
 
     # Defina o escopo de acesso (Google Drive e Sheets)
     print("\033[34mDefinindo o escopo de acesso...\033[0m")  # Azul para indicar o início do processo
