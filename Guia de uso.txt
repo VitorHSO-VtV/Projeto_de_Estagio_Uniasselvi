@@ -16,12 +16,18 @@ passo 8: editar a planilha de clientes
 
 passo 9: entrar no arquivo "main.py"
 
-passo 10: clicar no play no canto superior direito do navegador
+passo 10: mudar o valor da variável quantidade_de_caminhões para a quantidade de caminhões desejada
 
-passo 11: clicar com o botão direito do mouse em um dos arquivos pdf gerados com o nome "entregas_(data).pdf"
+passo 11: clicar no play no canto superior direito do navegador
 
-passo 12: clicar em baixar no menu suspenso
+passo 12: clicar com o botão direito do mouse em um dos arquivos pdf gerados com o nome "roteiro_entregas_caminhão(numero do caminhão).pdf"
 
-passo 13: abrir o arquivo
+passo 13: clicar em baixar no menu suspenso
 
-passo 14: conferir se deu certo
+passo 14: clicar com o botão direito do mouse em um dos arquivos xlsx gerados com o nome "roteiro_entregas_caminhão(numero do caminhão).xlsx"
+
+passo 15: clicar em baixar no menu suspenso
+
+passo 16: abrir os arquivos
+
+passo 17: conferir se deu certo

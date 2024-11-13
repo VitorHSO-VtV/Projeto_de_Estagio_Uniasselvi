@@ -40,10 +40,9 @@ def get_travel_time(origin, destination):
 
 
 
-# Função para criar rotas otimizadas para múltiplos dias
 def make_best_routes(grouped_clients, starting_point):
     routes = {}
-    remaining_clients = []  # Para armazenar clientes não visitados ao final
+    client_not_served = {}  # Dicionário para armazenar os clientes não atendidos
 
     # Obter as datas para os próximos três dias
     today = datetime.now()
@@ -53,7 +52,7 @@ def make_best_routes(grouped_clients, starting_point):
     def organize_route_for_session(session_time, unvisited_clients, current_location, accumulated_time):
         route = []
         total_travel_time = 0
-        session_time_limit = session_time # Tempo limite em minutos
+        session_time_limit = session_time  # Tempo limite em minutos
 
         while unvisited_clients:
             nearest_client = None
@@ -91,16 +90,17 @@ def make_best_routes(grouped_clients, starting_point):
                 # Atualiza o tempo total acumulado
                 accumulated_time += tempo_total_cliente
 
+                # Adiciona todos os dados do cliente à rota
                 route.append({
-                    "endereco": nearest_client['endereco'],
-                    "cliente": nearest_client.get('Cliente', 'Desconhecido'),
-                    "pedido": nearest_client.get('N° de pedido', 'Desconhecido'),
+                    **nearest_client,  # Inclui todos os dados do cliente diretamente
                     "tempo_de_viagem": travel_time,
                     "tempo_de_montagem": make_time,
-                    "tempo_total_cliente": tempo_total_cliente,  # Correção do tempo total do cliente
-                    "tempo_total_acumulado": accumulated_time,  # Atualizando o tempo total acumulado
-                    "status": "Pendente"
+                    "tempo_total_cliente": total_client_time,
+                    "tempo_total_acumulado": accumulated_time,
+                    "status": "Pendente",
+                    "posicao_entrega": len(route) + 1
                 })
+
                 unvisited_clients.remove(nearest_client)
                 current_location = nearest_client['endereco']
             else:
@@ -139,7 +139,8 @@ def make_best_routes(grouped_clients, starting_point):
                 "tempo_de_montagem": 0,  # Sem tempo de montagem no retorno
                 "tempo_total_cliente": travel_time_return,
                 "tempo_total_acumulado": accumulated_time + travel_time_return,  # Atualizando com tempo de retorno
-                "status": "Retorno ao ponto de partida"
+                "status": "Retorno ao ponto de partida",
+                "posicao_entrega": len(route_morning) + 1
             })
             daily_route["manhã"].extend(route_morning)
 
@@ -159,7 +160,8 @@ def make_best_routes(grouped_clients, starting_point):
                 "tempo_de_montagem": 0,  # Sem tempo de montagem no retorno
                 "tempo_total_cliente": travel_time_return,
                 "tempo_total_acumulado": accumulated_time + travel_time_return,  # Atualizando com tempo de retorno
-                "status": "Retorno ao ponto de partida"
+                "status": "Retorno ao ponto de partida",
+                "posicao_entrega": len(route_afternoon) + 1
             })
             daily_route["tarde"].extend(route_afternoon)
 
@@ -168,11 +170,24 @@ def make_best_routes(grouped_clients, starting_point):
         except Exception as e:
             print(f"\033[31mErro ao criar rota para o dia {delivery_date}: {e}\033[0m")
 
-    # Salva os clientes restantes em um arquivo JSON
-    remaining_clients.extend(unvisited_clients)
-    if remaining_clients:
-        with open("clientes_nao_atendidos.json", "w") as f:
-            json.dump(remaining_clients, f, ensure_ascii=False, indent=4)
-        print("\033[32mClientes não atendidos foram salvos no arquivo 'clientes_nao_atendidos.json'.\033[0m")
+        # Organize clientes não atendidos no formato solicitado
+        for client in unvisited_clients:
+            delivery_date = client.get('Data Entrega', 'Desconhecido')
+            city = client.get('localidade', 'Desconhecido')
+            district = client.get('bairro', 'Desconhecido')
 
-    return routes
+            if delivery_date not in client_not_served:
+                client_not_served[delivery_date] = {}
+
+            if city not in client_not_served[delivery_date]:
+                client_not_served[delivery_date][city] = {}
+
+            if district not in client_not_served[delivery_date][city]:
+                client_not_served[delivery_date][city][district] = []
+
+            # Adiciona todos os dados do cliente diretamente no dicionário
+            client_not_served[delivery_date][city][district].append(client)  # Todos os dados são mantidos
+            client_not_served[delivery_date][city][district].append(client)  # Aqui mantemos todos os dados do cliente
+
+
+    return routes, client_not_served
