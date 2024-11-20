@@ -1,6 +1,7 @@
 from Library import get_sheet, group_sheet, make_route, export
 import pandas as pd
 import json
+import os
 
 quantidade_de_caminhões = 3
 
@@ -13,11 +14,25 @@ print("Planilha salva com sucesso!")
 arquivo_existente = 'Data/planilha_local.xlsx'
 arquivo_novo = 'Data/nova_planilha_local.xlsx'
 
-# Ler os arquivos
-df_existente = pd.read_excel(arquivo_existente)
+# Verificar se o arquivo existe
+if not os.path.exists(arquivo_existente):
+    # Criar uma planilha vazia se o arquivo não existir
+    print(f"Arquivo {arquivo_existente} não encontrado. Criando um arquivo vazio...")
+    df_existente = pd.DataFrame()  # Cria um DataFrame vazio
+    df_existente.to_excel(arquivo_existente, index=False)  # Salva o DataFrame vazio no arquivo
+else:
+    # Ler o arquivo existente
+    try:
+        df_existente = pd.read_excel(arquivo_existente)
+    except ValueError:
+        print(f"Erro ao ler {arquivo_existente}. Tentando criar uma planilha vazia...")
+        df_existente = pd.DataFrame()
+        df_existente.to_excel(arquivo_existente, index=False)
+
+# Ler o novo arquivo
 df_novo = pd.read_excel(arquivo_novo)
 
-# Verificar se são iguais
+# Verificar se os arquivos são iguais
 if not df_existente.equals(df_novo):
     # Substituir o conteúdo do arquivo existente pelo novo
     df_novo.to_excel(arquivo_existente, index=False)
@@ -25,11 +40,13 @@ if not df_existente.equals(df_novo):
     
     # Agrupa os dados da planilha e transforma em um dicionário
     print("Agrupando dados da planilha...")
-    client_not_served = group_sheet.group_all("Data/planilha_local.xlsx")
+    special_clients, client_not_served = group_sheet.group_all("Data/planilha_local.xlsx")
     print("Dados agrupados com sucesso!")
 
     # Salva os dados agrupados em um arquivo JSON chamado 'planilha_agrupada.json'
     print("Salvando os dados agrupados em JSON...")
+    with open("Data/planilha_de_clientes_especiais_agrupada.json", "w") as file:
+        json.dump(special_clients, file, indent=4)  # `indent=4` organiza o JSON para melhor legibilidade
     with open("Data/planilha_agrupada.json", "w") as file:
         json.dump(client_not_served, file, indent=4)  # `indent=4` organiza o JSON para melhor legibilidade
     print("Dados agrupados salvos com sucesso em 'planilha_agrupada.json'.")
@@ -44,12 +61,10 @@ if not df_existente.equals(df_novo):
         
         # Se for o caminhão 1, adiciona os clientes especiais à rota
         if truck == 1:
-            print("Adicionando clientes especiais ao caminhão 1...")
-            with open("Data/planilha_de_clientes_especiais_agrupada.json", "r") as file:
-                special_clients = json.load(file)
-            
             route, client_not_served = make_route.exceptions(route, client_not_served, special_clients)
             print(f"Clientes especiais adicionados ao caminhão {truck}.")
+        else:
+            print(f"Roteiro do caminhão {truck} gerado sem clientes especiais.")  # Para caminhões 2 e 3
 
         # Salva o roteiro gerado em um arquivo JSON para o caminhão atual
         print(f"Salvando o roteiro de entregas do caminhão {truck} em JSON...")
@@ -63,9 +78,16 @@ if not df_existente.equals(df_novo):
             json.dump(client_not_served, f, indent=4)
         print("Clientes não atendidos salvos em 'clientes_nao_atendidos.json'.")
 
-        # Cria um PDF com o roteiro do caminhão atual
-        print(f"Gerando o PDF do roteiro de entregas do caminhão {truck}...")
-        export.create_pdf(route, output_file=f"Data/roteiro_entregas_caminhão{truck}.pdf")
+        try:
+            print("Tentando carregar caminhões.json...")
+            truck_size_data = export.load_truck_data("Data/caminhoes.json")
+            print("Dados de caminhões carregados:", truck_size_data)
+        except Exception as e:
+            print(f"Erro ao carregar caminhões.json: {e}")
+
+        # Gerar o PDF do roteiro de entregas para o caminhão atual
+        print(f"Gerando o PDF para o caminhão {truck}...")
+        export.create_pdf(routes=route, truck_number=truck, truck_size=truck_size_data, output_file=f"Data/roteiro_entregas_caminhão{truck}.pdf")
         print(f"PDF gerado com sucesso: 'roteiro_entregas_caminhão{truck}.pdf'.")
 
         # Cria um arquivo Excel com o roteiro do caminhão atual
@@ -85,9 +107,16 @@ else:
         with open(f"Data/route_truck{truck}.json", 'r') as f:
             route = json.load(f)  # Carrega o conteúdo do arquivo JSON de rotas
         
+        try:
+            print("Tentando carregar caminhões.json...")
+            truck_size_data = export.load_truck_data("Data/caminhoes.json")
+            print("Dados de caminhões carregados:", truck_size_data)
+        except Exception as e:
+            print(f"Erro ao carregar caminhões.json: {e}")
+
         # Gerar o PDF do roteiro de entregas para o caminhão atual
         print(f"Gerando o PDF para o caminhão {truck}...")
-        export.create_pdf(route, truck, output_file=f"Data/roteiro_entregas_caminhão{truck}.pdf")
+        export.create_pdf(routes=route, truck_number=truck, truck_size=truck_size_data, output_file=f"Data/roteiro_entregas_caminhão{truck}.pdf")
         print(f"PDF gerado com sucesso: 'roteiro_entregas_caminhão{truck}.pdf'.")
 
         # Gerar o arquivo Excel para o caminhão atual

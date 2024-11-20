@@ -1,60 +1,10 @@
 {
-    "19/11/2024": {
-        "Bigua\u00e7u": {
-            "Areias de Cima (Guaporanga)": [
-                {
-                    "N\u00b0 de pedido": "11030",
-                    "Data Entrega": "19/11/2024",
-                    "Nome cliente": NaN,
-                    "Cep": "88168-665",
-                    "N\u00b0 Casa/Ap": "16",
-                    "Modelo Sof\u00e1": "ALASCA CANTO",
-                    "Medida Sof\u00e1": "21",
-                    "Volume M\u00b3": "147",
-                    "Grau de dificuldade(F,D,M,X)": "F",
-                    "Tempo de montagem/entrega": "30",
-                    "Caracter\u00edsticas sof\u00e1": "BIPARTIDO",
-                    "Unnamed: 11": "FIXO",
-                    "Alocado S/N": NaN,
-                    "Tipo Montador": "Equipe 1",
-                    "Tipo caminh\u00e3o (A,B.C)": "A",
-                    "Tipo Cliente / ESPECIAL/NORMAL": "ESPECIAL",
-                    "Local": "CASA",
-                    "andar": "1",
-                    "Restri\u00e7\u00f5es local (Elevador)": "N",
-                    "restri\u00e7\u00f5es Hor\u00e1rio": NaN,
-                    "Entrega / Retirada": "Retirada",
-                    "Status - Entrega - E/N": NaN,
-                    "F\u00e1cil(F)": "5",
-                    "M\u00e9dio(M)": "0",
-                    "Dif\u00edcil(D)": "0",
-                    "Inteiro (X)": "0",
-                    "Elevador": "5",
-                    "caminh\u00e3o/sala cliente(T)": "20",
-                    "endereco": "Rua Leopoldo da Silva, 16 - Areias de Cima (Guaporanga), Bigua\u00e7u - SC, 88168-665",
-                    "cep": "88168-665",
-                    "logradouro": "Rua Leopoldo da Silva",
-                    "complemento": "",
-                    "unidade": "",
-                    "bairro": "Areias de Cima (Guaporanga)",
-                    "localidade": "Bigua\u00e7u",
-                    "uf": "SC",
-                    "estado": "Santa Catarina",
-                    "regiao": "Sul",
-                    "ibge": "4202305",
-                    "gia": "",
-                    "ddd": "48",
-                    "siafi": "8045"
-                }
-            ]
-        }
-    },
-    "20/11/2024": {
+    "21/11/2024": {
         "Florian\u00f3polis": {
             "Agron\u00f4mica": [
                 {
                     "N\u00b0 de pedido": "11024",
-                    "Data Entrega": "20/11/2024",
+                    "Data Entrega": "21/11/2024",
                     "Nome cliente": NaN,
                     "Cep": "88025-050",
                     "N\u00b0 Casa/Ap": "10",
@@ -95,13 +45,7 @@
                     "gia": "",
                     "ddd": "48",
                     "siafi": "8105"
-                }
-            ]
-        }
-    },
-    "21/11/2024": {
-        "Florian\u00f3polis": {
-            "Agron\u00f4mica": [
+                },
                 {
                     "N\u00b0 de pedido": "11025",
                     "Data Entrega": "21/11/2024",
@@ -145,6 +89,54 @@
                     "gia": "",
                     "ddd": "48",
                     "siafi": "8105"
+                }
+            ]
+        },
+        "Bigua\u00e7u": {
+            "Areias de Cima (Guaporanga)": [
+                {
+                    "N\u00b0 de pedido": "11030",
+                    "Data Entrega": "21/11/2024",
+                    "Nome cliente": NaN,
+                    "Cep": "88168-665",
+                    "N\u00b0 Casa/Ap": "16",
+                    "Modelo Sof\u00e1": "ALASCA CANTO",
+                    "Medida Sof\u00e1": "21",
+                    "Volume M\u00b3": "147",
+                    "Grau de dificuldade(F,D,M,X)": "F",
+                    "Tempo de montagem/entrega": "30",
+                    "Caracter\u00edsticas sof\u00e1": "BIPARTIDO",
+                    "Unnamed: 11": "FIXO",
+                    "Alocado S/N": NaN,
+                    "Tipo Montador": "Equipe 1",
+                    "Tipo caminh\u00e3o (A,B.C)": "A",
+                    "Tipo Cliente / ESPECIAL/NORMAL": "ESPECIAL",
+                    "Local": "CASA",
+                    "andar": "1",
+                    "Restri\u00e7\u00f5es local (Elevador)": "N",
+                    "restri\u00e7\u00f5es Hor\u00e1rio": NaN,
+                    "Entrega / Retirada": "Retirada",
+                    "Status - Entrega - E/N": NaN,
+                    "F\u00e1cil(F)": "5",
+                    "M\u00e9dio(M)": "0",
+                    "Dif\u00edcil(D)": "0",
+                    "Inteiro (X)": "0",
+                    "Elevador": "5",
+                    "caminh\u00e3o/sala cliente(T)": "20",
+                    "endereco": "Rua Leopoldo da Silva, 16 - Areias de Cima (Guaporanga), Bigua\u00e7u - SC, 88168-665",
+                    "cep": "88168-665",
+                    "logradouro": "Rua Leopoldo da Silva",
+                    "complemento": "",
+                    "unidade": "",
+                    "bairro": "Areias de Cima (Guaporanga)",
+                    "localidade": "Bigua\u00e7u",
+                    "uf": "SC",
+                    "estado": "Santa Catarina",
+                    "regiao": "Sul",
+                    "ibge": "4202305",
+                    "gia": "",
+                    "ddd": "48",
+                    "siafi": "8045"
                 }
             ]
         }
