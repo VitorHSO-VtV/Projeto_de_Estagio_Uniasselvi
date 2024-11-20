@@ -2,8 +2,11 @@ from fpdf import FPDF
 import pandas as pd
 from openpyxl import load_workbook
 from openpyxl.styles import Alignment, Font
+from Library import group_sheet, get_sheet
+import json
 
-def create_pdf(routes, output_file='roteiro_entregas.pdf'):
+def create_pdf(routes, truck_number, output_file='roteiro_entregas.pdf'):
+    # Cria o PDF com as rotas
     pdf = FPDF()
     pdf.set_auto_page_break(auto=True, margin=15)
     
@@ -18,6 +21,18 @@ def create_pdf(routes, output_file='roteiro_entregas.pdf'):
         pdf.add_page()
         pdf.set_font("Arial", style='B', size=12)
         pdf.cell(200, 10, txt=f"Data de Entrega: {date}", ln=True)
+        pdf.ln(5)  # Linha em branco
+
+        # Dados do caminhão e equipe
+        equipe = f"Equipe {truck_number}"
+        total_clientes = sum(len(clients) for clients in daily_route.values())
+        tamanho_caminhao = "Grande" if total_clientes > 10 else "Pequeno"  # Exemplo de lógica
+
+        pdf.set_font("Arial", style='B', size=10)
+        pdf.cell(200, 10, txt=f"Caminhão {truck_number}", ln=True)
+        pdf.cell(200, 10, txt=f"Equipe: {equipe}", ln=True)
+        pdf.cell(200, 10, txt=f"Total de Clientes: {total_clientes}", ln=True)
+        pdf.cell(200, 10, txt=f"Tamanho do Caminhão: {tamanho_caminhao}", ln=True)
         pdf.ln(5)  # Linha em branco
         
         for session, clients in daily_route.items():

@@ -6,7 +6,7 @@ quantidade_de_caminhões = 3
 
 # Salva a planilha com o nome "pasta 1 José Carlos"
 print("Salvando a planilha...")
-get_sheet.save_sheet("pasta 1 José Carlos")
+get_sheet.save_sheet("pasta 1 José Carlos", tab=2, head=2)
 print("Planilha salva com sucesso!")
 
 # Caminho dos arquivos
@@ -42,6 +42,15 @@ if not df_existente.equals(df_novo):
         route, client_not_served = make_route.make_best_routes(client_not_served, 
                                                             "Rua Orlando Odilio Koerich, SN Galpão II - Picadas do Sul, São José - SC, 88102-106")
         
+        # Se for o caminhão 1, adiciona os clientes especiais à rota
+        if truck == 1:
+            print("Adicionando clientes especiais ao caminhão 1...")
+            with open("Data/planilha_de_clientes_especiais_agrupada.json", "r") as file:
+                special_clients = json.load(file)
+            
+            route, client_not_served = make_route.exceptions(route, client_not_served, special_clients)
+            print(f"Clientes especiais adicionados ao caminhão {truck}.")
+
         # Salva o roteiro gerado em um arquivo JSON para o caminhão atual
         print(f"Salvando o roteiro de entregas do caminhão {truck} em JSON...")
         with open(f"Data/route_truck{truck}.json", "w") as file:
@@ -78,7 +87,7 @@ else:
         
         # Gerar o PDF do roteiro de entregas para o caminhão atual
         print(f"Gerando o PDF para o caminhão {truck}...")
-        export.create_pdf(route, output_file=f"Data/roteiro_entregas_caminhão{truck}.pdf")
+        export.create_pdf(route, truck, output_file=f"Data/roteiro_entregas_caminhão{truck}.pdf")
         print(f"PDF gerado com sucesso: 'roteiro_entregas_caminhão{truck}.pdf'.")
 
         # Gerar o arquivo Excel para o caminhão atual

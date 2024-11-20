@@ -66,4 +66,50 @@ def group_all(sheet):
     grouped_sheet = group_customers_by_date(sheet)
     grouped_sheet = group_customers_by_cep(grouped_sheet)
     print("\033[32mPlanilha agrupada com sucesso.\033[0m")  # Verde para sucesso
-    return grouped_sheet
+    special_clients, grouped_sheet = separate_clients(grouped_sheet)
+    return special_clients, grouped_sheet
+
+def sheet_to_dict(file_path):
+    # Ler a planilha
+    df = pd.read_excel(file_path)  # Para arquivos .xlsx
+
+    # Converter para dicionário (cada linha será um dicionário)
+    data_dict = df.to_dict(orient='records')
+
+    return data_dict
+
+def separate_clients(data):
+    # Dictionaries for special and normal clients
+    special_clients = {}
+    normal_clients = {}
+    
+    # Iterate over the dates in the dictionary
+    for date, cities in data.items():
+        for city, neighborhoods in cities.items():
+            for neighborhood, orders in neighborhoods.items():
+                # Filter the orders
+                for order in orders:
+                    # Check the client type
+                    client_type = order.get("Tipo Cliente / ESPECIAL/NORMAL", "").upper()
+
+                    # Separate based on client type
+                    if client_type == "ESPECIAL":
+                        if date not in special_clients:
+                            special_clients[date] = {}
+                        if city not in special_clients[date]:
+                            special_clients[date][city] = {}
+                        if neighborhood not in special_clients[date][city]:
+                            special_clients[date][city][neighborhood] = []
+
+                        special_clients[date][city][neighborhood].append(order)
+                    else:
+                        if date not in normal_clients:
+                            normal_clients[date] = {}
+                        if city not in normal_clients[date]:
+                            normal_clients[date][city] = {}
+                        if neighborhood not in normal_clients[date][city]:
+                            normal_clients[date][city][neighborhood] = []
+
+                        normal_clients[date][city][neighborhood].append(order)
+
+    return special_clients, normal_clients

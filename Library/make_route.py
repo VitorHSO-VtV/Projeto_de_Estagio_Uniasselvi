@@ -191,3 +191,57 @@ def make_best_routes(grouped_clients, starting_point):
 
 
     return routes, client_not_served
+
+def exceptions(route, client_not_served, special_clients):
+    def add_special_clients_to_route(route, special_clients):
+        # Itera sobre as rotas já criadas (para cada dia e período)
+        for date, periods in route.items():
+            for period, deliveries in periods.items():
+                total_time_spent = sum(client.get('tempo_total_cliente', 0) for client in deliveries)
+                remaining_time = 240 - total_time_spent  # Tempo restante para o turno
+
+                # Se não houver tempo restante, pula para o próximo período
+                if remaining_time <= 0:
+                    continue
+
+                # Adiciona os clientes especiais dentro do tempo restante
+                for special_client in special_clients.get(date, {}).get(period, []):
+                    make_time = float(special_client.get('Tempo de montagem/entrega', 0))
+                    travel_time = get_travel_time(deliveries[-1]['endereco'], special_client['endereco']) if deliveries else 0
+                    total_client_time = make_time + travel_time
+
+                    # Verifica se há tempo suficiente para adicionar o cliente especial
+                    if total_client_time <= remaining_time:
+                        deliveries.append({
+                            **special_client,  # Inclui todos os dados do cliente especial
+                            "tempo_de_viagem": travel_time,
+                            "tempo_de_montagem": make_time,
+                            "tempo_total_cliente": total_client_time,
+                            "tempo_total_acumulado": total_time_spent + total_client_time,
+                            "status": "Pendente",
+                            "posicao_entrega": len(deliveries) + 1
+                        })
+                        remaining_time -= total_client_time  # Atualiza o tempo restante
+                    else:
+                        # Se não houver tempo suficiente, adiciona o cliente ao client_not_served
+                        add_to_client_not_served(client_not_served, special_client, date)
+
+    def add_to_client_not_served(client_not_served, client, date):
+        city = client.get('localidade', 'Desconhecido')
+        district = client.get('bairro', 'Desconhecido')
+
+        if date not in client_not_served:
+            client_not_served[date] = {}
+
+        if city not in client_not_served[date]:
+            client_not_served[date][city] = {}
+
+        if district not in client_not_served[date][city]:
+            client_not_served[date][city][district] = []
+
+        client_not_served[date][city][district].append(client)  # Adiciona o cliente ao dicionário de não atendidos
+
+    # Chama a função para adicionar clientes especiais nas rotas
+    add_special_clients_to_route(route, special_clients)
+
+    return route, client_not_served  # Retorna as rotas e os clientes não atendidos
