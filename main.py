@@ -3,7 +3,7 @@ import pandas as pd
 import json
 import os
 
-quantidade_de_caminhões = 3
+quantidade_de_caminhões = 2
 
 # Salva a planilha com o nome "pasta 1 José Carlos"
 print("Salvando a planilha...")

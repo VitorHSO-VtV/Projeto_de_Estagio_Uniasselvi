@@ -70,21 +70,18 @@ def create_pdf(routes, truck_number, truck_size, output_file='roteiro_entregas.p
                 pdf.cell(200, 10, txt=f"Parada {idx}", ln=True)
 
                 client_info = (
-                    f"Nº do pedido: {safe_value(client.get('Nº de pedido'))} | "
+                    f"Nº do pedido: {safe_value(client.get('N\u00b0 de pedido'))} | "
                     f"Data de entrega: {safe_value(client.get('Data Entrega'))} | "
                     f"CEP: {safe_value(client.get('Cep'))} | "
-                    f"Número da casa: {safe_value(client.get('Nº Casa/Ap'))} | "
+                    f"Número da casa: {safe_value(client.get('N\u00b0 Casa/Ap'))} | "
                     f"Endereço: {safe_value(client.get('endereco'))} | "
                     f"Modelo do Sofá: {safe_value(client.get('Modelo Sofá'))} | "
                     f"Medida Sofá: {safe_value(client.get('Medida Sofá'))} | "
                     f"Características Sofá: {safe_value(client.get('Características sofá'))} | "
-                    f"Tipo Montador: {safe_value(client.get('Tipo Montador'))} | "
-                    f"Tipo Caminhão: {safe_value(client.get('Tipo caminhão'))} | "
                     f"Local: {safe_value(client.get('Local'))} | "
                     f"Andar: {safe_value(client.get('andar'))} | "
                     f"Restrição de local: {safe_value(client.get('Restrições local Elevador'))} | "
                     f"Restrição de Horário: {safe_value(client.get('restrições Horário'))} | "
-                    f"Status: {safe_value(client.get('status'))}"
                 )
 
                 pdf.multi_cell(0, 10, txt=client_info)
@@ -110,7 +107,7 @@ def create_xlsx(routes, output_file='roteiro_entregas.xlsx'):
                             "Nº Pedido": safe_value(client.get('N\u00b0 de pedido')),
                             "Data de entrega": safe_value(client.get('Data Entrega')),
                             "Período": session,
-                            "Nome do cliente": safe_value(client.get('Cliente', 'Desconhecido')),
+                            "Nome do cliente": safe_value(client.get('Nome cliente', 'Desconhecido')),
                             "Bairro": safe_value(client.get('bairro'))
                         })
 
