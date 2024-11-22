@@ -10,6 +10,8 @@ print("Salvando a planilha...")
 get_sheet.save_sheet("pasta 1 José Carlos", tab=2, head=2)
 print("Planilha salva com sucesso!")
 
+get_sheet.save_trucks()
+
 # Caminho dos arquivos
 arquivo_existente = 'Data/planilha_local.xlsx'
 arquivo_novo = 'Data/nova_planilha_local.xlsx'
@@ -94,6 +96,11 @@ if not df_existente.equals(df_novo):
         print(f"Gerando o arquivo Excel do roteiro de entregas do caminhão {truck}...")
         export.create_xlsx(route, output_file=f"Data/roteiro_entregas_caminhão{truck}.xlsx")
         print(f"Arquivo Excel gerado com sucesso: 'roteiro_entregas_caminhão{truck}.xlsx'.")
+
+        # Adiciona a funcionalidade para exportar a rota como link do Google Maps
+        print(f"Gerando o arquivo de texto com o link da rota para o caminhão {truck}...")
+        export.create_links_txt(route, f"Data/roteiro_entregas_caminhão{truck}.txt")
+        print(f"Link da rota salvo em 'roteiro_entregas_caminhão{truck}.txt'.")
 else:
     print("Os arquivos já são iguais. Nenhuma ação foi necessária.")
 
@@ -123,5 +130,10 @@ else:
         print(f"Gerando o arquivo Excel para o caminhão {truck}...")
         export.create_xlsx(route, output_file=f"Data/roteiro_entregas_caminhão{truck}.xlsx")
         print(f"Arquivo Excel gerado com sucesso: 'roteiro_entregas_caminhão{truck}.xlsx'.")
+
+        # Adiciona a funcionalidade para exportar a rota como link do Google Maps
+        print(f"Gerando o arquivo de texto com o link da rota para o caminhão {truck}...")
+        export.create_links_txt(route, f"Data/roteiro_entregas_caminhão{truck}.txt")
+        print(f"Link da rota salvo em 'roteiro_entregas_caminhão{truck}.txt'.")
 
 print("\nProcesso completo de criação de rotas, geração de arquivos e exportação finalizado!")

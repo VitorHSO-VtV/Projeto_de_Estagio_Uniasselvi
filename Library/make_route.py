@@ -79,22 +79,21 @@ def make_best_routes(grouped_clients, starting_point):
                         if total_client_time < shortest_time:
                             nearest_client = client
                             shortest_time = total_client_time
+                            shortest_make_time = make_time
+                            shortest_travel_time = travel_time
                 except Exception as e:
                     print(f"\033[31mErro ao processar cliente: {e}\033[0m")
 
-            if nearest_client and (accumulated_time + total_client_time) <= session_time_limit:
-                total_travel_time += shortest_time
-                tempo_total_cliente = travel_time + make_time  # Soma de viagem + montagem
-
+            if nearest_client and (accumulated_time + shortest_time) <= session_time_limit:
                 # Atualiza o tempo total acumulado
-                accumulated_time += tempo_total_cliente
+                accumulated_time += shortest_time
 
                 # Adiciona todos os dados do cliente à rota
                 route.append({
                     **nearest_client,  # Inclui todos os dados do cliente diretamente
-                    "tempo_de_viagem": travel_time,
-                    "tempo_de_montagem": make_time,
-                    "tempo_total_cliente": total_client_time,
+                    "tempo_de_viagem": shortest_travel_time,
+                    "tempo_de_montagem": shortest_make_time,
+                    "tempo_total_cliente": shortest_time,
                     "tempo_total_acumulado": accumulated_time,
                     "status": "Pendente",
                     "posicao_entrega": len(route) + 1
@@ -188,18 +187,9 @@ def make_best_routes(grouped_clients, starting_point):
             client_not_served[delivery_date][city][district].append(client)  # Mantemos o cliente apenas uma vez
 
     return routes, client_not_served
-
+    
 def exceptions(route, client_not_served, special_clients):
-    """
-    Ajusta as rotas existentes, priorizando a inclusão de clientes especiais. 
-    Remove clientes normais, se necessário, para garantir que clientes especiais sejam atendidos.
-    """
-
     def add_special_clients_to_route(route, special_clients):
-        """
-        Adiciona clientes especiais às rotas existentes, garantindo que sejam priorizados.
-        Remove clientes normais se não houver tempo suficiente.
-        """
         for date, cities in special_clients.items():
             if date not in route:
                 route[date] = {}
@@ -252,9 +242,6 @@ def exceptions(route, client_not_served, special_clients):
                             print(f"Erro ao processar cliente especial: {e}")
 
     def add_to_client_not_served(client_not_served, client, date):
-        """
-        Adiciona um cliente não atendido ao dicionário de clientes não atendidos.
-        """
         city = client.get('localidade', 'Desconhecido')
         district = client.get('bairro', 'Desconhecido')
 

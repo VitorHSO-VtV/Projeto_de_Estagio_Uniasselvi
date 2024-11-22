@@ -1,6 +1,8 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
+from Library import group_sheet
+import json
 
 def save_sheet(sheet_name, credentials_path="./Data/credentials.json", file_name="nova_planilha_local.xlsx", tab=1, head=1):
 
@@ -50,7 +52,7 @@ def save_sheet(sheet_name, credentials_path="./Data/credentials.json", file_name
 
 def save_trucks():
     try:
-        get_sheet.save_sheet("pasta 1 José Carlos", file_name="caminhoes.xlsx", tab=5, head=1)
+        save_sheet("pasta 1 José Carlos", file_name="caminhoes.xlsx", tab=5, head=1)
         print("Caminhões salvos com sucesso!")
     except Exception as e:
         print(f"Erro ao salvar caminhões: {e}")

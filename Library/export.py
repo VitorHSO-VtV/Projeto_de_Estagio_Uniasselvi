@@ -4,6 +4,7 @@ from openpyxl import load_workbook
 from openpyxl.styles import Alignment, Font
 from Library import group_sheet, get_sheet
 import json
+import urllib.parse
 
 # Função para carregar as informações dos caminhões do arquivo JSON
 def load_truck_data(filename='./Data/caminhões.json'):
@@ -69,6 +70,13 @@ def create_pdf(routes, truck_number, truck_size, output_file='roteiro_entregas.p
 
                 pdf.cell(200, 10, txt=f"Parada {idx}", ln=True)
 
+                sofa_measure = client.get('Medida Sofá', '').strip()
+                if sofa_measure.isdigit():  # Verifica se é numérico
+                    sofa_measure = round(float(sofa_measure) * 0.1, 2)
+                else:
+                    print(f"Valor inesperado para 'Medida Sofá': {sofa_measure}")
+                    sofa_measure = "Valor inválido"
+
                 client_info = (
                     f"Nº do pedido: {safe_value(client.get('N\u00b0 de pedido'))} | "
                     f"Data de entrega: {safe_value(client.get('Data Entrega'))} | "
@@ -76,7 +84,7 @@ def create_pdf(routes, truck_number, truck_size, output_file='roteiro_entregas.p
                     f"Número da casa: {safe_value(client.get('N\u00b0 Casa/Ap'))} | "
                     f"Endereço: {safe_value(client.get('endereco'))} | "
                     f"Modelo do Sofá: {safe_value(client.get('Modelo Sofá'))} | "
-                    f"Medida Sofá: {safe_value(client.get('Medida Sofá'))} | "
+                    f"Medida Sofá: {safe_value(sofa_measure)} | "
                     f"Características Sofá: {safe_value(client.get('Características sofá'))} | "
                     f"Local: {safe_value(client.get('Local'))} | "
                     f"Andar: {safe_value(client.get('andar'))} | "
@@ -108,7 +116,8 @@ def create_xlsx(routes, output_file='roteiro_entregas.xlsx'):
                             "Data de entrega": safe_value(client.get('Data Entrega')),
                             "Período": session,
                             "Nome do cliente": safe_value(client.get('Nome cliente', 'Desconhecido')),
-                            "Bairro": safe_value(client.get('bairro'))
+                            "Bairro": safe_value(client.get('bairro')),
+                            "Modelo do sofá": safe_value(client.get('Modelo Sofá', 'Desconhecido'))
                         })
 
     # Converte os dados em um DataFrame e salva no arquivo Excel
@@ -146,3 +155,30 @@ def create_xlsx(routes, output_file='roteiro_entregas.xlsx'):
 
     wb.save(output_file)
     print(f"Arquivo XLSX gerado com sucesso em {output_file}")
+
+def create_links_txt(deliveries_json, output_file="route_link.txt"):
+    try:
+        base_url = "https://www.google.com/maps/dir/"
+        addresses = []
+
+        # Iterar por datas e turnos no JSON
+        for date, shifts in deliveries_json.items():
+            for shift, deliveries in shifts.items():
+                for delivery in deliveries:
+                    if "endereco" in delivery:
+                        addresses.append(delivery["endereco"])
+
+        # Escapar os endereços para o formato URL
+        encoded_addresses = [urllib.parse.quote_plus(address) for address in addresses]
+
+        # Criar o link concatenando os endereços
+        route_link = base_url + "/".join(encoded_addresses)
+
+        # Salvar o link em um arquivo texto
+        with open(output_file, "w") as file:
+            file.write(route_link)
+        
+        print(f"Link salvo no arquivo: {output_file}")
+        return route_link
+    except Exception as e:
+        print(f"Erro ao exportar a rota: {e}")

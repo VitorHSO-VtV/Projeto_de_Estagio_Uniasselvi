@@ -28,6 +28,22 @@ passo 14: clicar com o botão direito do mouse em um dos arquivos xlsx gerados c
 
 passo 15: clicar em baixar no menu suspenso
 
-passo 16: abrir os arquivos
+passo 16: clicar com o botão direito do mouse em um dos arquivos xlsx gerados com o nome "roteiro_entregas_caminhão(numero do caminhão).txt"
 
-passo 17: conferir se deu certo
+passo 17: clicar nas teclas "Ctrl + A" para selecionar todo o texto
+
+passo 18: clicar nas teclas "Ctrl + C" para copiar o texto
+
+passo 19: abrir uma nova aba no navegador
+
+passo 20: clicar na caixa de buscas do navegador
+
+passo 21: clicar nas teclas "Ctrl + V" para colar o texto
+
+passo 22: clicar na tecla Enter
+
+passo 23: analizar a rota no Google Maps
+
+passo 24: abrir os arquivos
+
+passo 25: conferir se deu certo

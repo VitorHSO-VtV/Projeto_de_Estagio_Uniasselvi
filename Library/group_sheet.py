@@ -2,11 +2,13 @@ import pandas as pd
 import requests
 from collections import defaultdict
 
-def group_customers_by_date(planilha_path):
+def group_customers_by_date(sheet_path):
     # Carrega a planilha no DataFrame, forçando todos os dados a serem tratados como string
     print("\033[34mCarregando a planilha...\033[0m")  # Azul para indicar carregamento
     try:
-        df = pd.read_excel(planilha_path, dtype=str)
+        df = pd.read_excel(sheet_path, dtype=str)
+        # Substitui valores ausentes (NaN) por strings vazias
+        df.fillna("", inplace=True)
         print("\033[32mPlanilha carregada com sucesso.\033[0m")  # Verde para sucesso
     except Exception as e:
         print(f"\033[31mErro ao carregar a planilha: {e}\033[0m")  # Vermelho para erro
@@ -14,10 +16,10 @@ def group_customers_by_date(planilha_path):
 
     # Agrupa os dados por 'Data de Entrega', mantendo todas as colunas para cada cliente em listas
     print("\033[34mAgrupando os clientes por data de entrega...\033[0m")  # Azul para o agrupamento
-    agrupamento = df.groupby('Data Entrega').apply(lambda x: x.to_dict(orient='records')).to_dict()
+    grouped = df.groupby('Data Entrega').apply(lambda x: x.to_dict(orient='records')).to_dict()
     print("\033[32mAgrupamento concluído.\033[0m")  # Verde para sucesso
     
-    return agrupamento
+    return grouped
 
 def get_address_info(cep):
     """Fetch address information based on the provided CEP."""
@@ -40,7 +42,8 @@ def group_customers_by_cep(dictionary):
             # Importa os dados contidos nos cep
             cep = client.get('Cep')
             if not cep:
-                print(f"\033[33mAviso: Cliente sem CEP, ignorando...\033[0m")  # Amarelo para aviso
+                if client.get('N\u00b0 de pedido'):
+                    print(f"\033[33mAviso: Cliente {client.get('N\u00b0 de pedido')} sem CEP, ignorando...\033[0m")  # Amarelo para aviso
                 continue  # Ignora clientes sem cep
             
             address_info = get_address_info(cep)
@@ -51,8 +54,17 @@ def group_customers_by_cep(dictionary):
                 
                 # Formata o endereço completo
                 numero_casa = client.get("N° Casa/Ap", "")
-                endereco_completo = f"{address_info.get('logradouro')}, {numero_casa} - {neighborhood}, {city} - {address_info.get('uf')}, {address_info.get('cep')}"
-                client['endereco'] = endereco_completo
+
+                address_info = {
+                                    "logradouro": address_info.get('logradouro'),
+                                    "bairro": neighborhood,
+                                    "localidade": city,
+                                    "uf": address_info.get('uf'),
+                                    "cep": cep,
+                                    "numero_casa": numero_casa
+                                }
+
+                client['endereco'] = build_complete_address(address_info)
                 
                 # Adiciona os dados do cliente, incluindo informações do endereço
                 client_with_address = {**client, **address_info}
@@ -113,3 +125,24 @@ def separate_clients(data):
                         normal_clients[date][city][neighborhood].append(order)
 
     return special_clients, normal_clients
+
+def build_complete_address(address_info):
+    # Lista para acumular as partes do endereço que existem
+    address_parts = []
+
+    # Adiciona cada parte do endereço se ela existir
+    if address_info.get('logradouro'):
+        address_parts.append(f"{address_info.get('logradouro')}")
+    if address_info.get('numero_casa'):
+        address_parts.append(f"{address_info.get('numero_casa')}")
+    if address_info.get('bairro'):
+        address_parts.append(f"{address_info.get('bairro')}")
+    if address_info.get('localidade'):
+        address_parts.append(f"{address_info.get('localidade')}")
+    if address_info.get('uf'):
+        address_parts.append(f"{address_info.get('uf')}")
+    if address_info.get('cep'):
+        address_parts.append(f"{address_info.get('cep')}")
+
+    # Junta as partes do endereço com separadores apropriados
+    return ", ".join(address_parts)
