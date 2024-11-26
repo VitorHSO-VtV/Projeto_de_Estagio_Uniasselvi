@@ -34,7 +34,14 @@ def create_pdf(routes, truck_number, truck_size, output_file='roteiro_entregas.p
 
     # Obtém o volume do caminhão com base no número
     truck_key = f"CAMINHÃO {truck_number}"  # Exemplo: "CAMINHÃO 1"
-    truck_volume = truck_size.get(truck_key, "Desconhecido")  # Busca o volume do caminhão
+
+    # Procurando o caminhão correto na lista de caminhões
+    truck_data = next((t for t in truck_size if t["TAMANHO CAMINHÃO "] == truck_key), None)
+
+    if truck_data:
+        truck_volume = truck_data.get("volume", "Desconhecido")  # Busca o volume do caminhão
+    else:
+        truck_volume = "Desconhecido"  # Se o caminhão não for encontrado, atribui "Desconhecido"
 
     for date, daily_route in routes.items():
         pdf.add_page()

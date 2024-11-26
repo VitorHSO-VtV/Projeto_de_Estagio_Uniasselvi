@@ -3,11 +3,11 @@ import pandas as pd
 import json
 import os
 
-quantidade_de_caminhões = 2
+quantidade_de_caminhões = 3
 
 # Salva a planilha com o nome "pasta 1 José Carlos"
 print("Salvando a planilha...")
-get_sheet.save_sheet("pasta 1 José Carlos", tab=2, head=2)
+get_sheet.save_sheet("pasta 1 José Carlos", tab=2, head=2, )
 print("Planilha salva com sucesso!")
 
 get_sheet.save_trucks()
@@ -34,6 +34,9 @@ else:
 # Ler o novo arquivo
 df_novo = pd.read_excel(arquivo_novo)
 
+with open("Data/caminhoes.json", "r") as file:
+    trucks_data = json.load(file)
+
 # Verificar se os arquivos são iguais
 if not df_existente.equals(df_novo):
     # Substituir o conteúdo do arquivo existente pelo novo
@@ -53,54 +56,67 @@ if not df_existente.equals(df_novo):
         json.dump(client_not_served, file, indent=4)  # `indent=4` organiza o JSON para melhor legibilidade
     print("Dados agrupados salvos com sucesso em 'planilha_agrupada.json'.")
 
-    # Transforma os dados agrupados em um roteiro de entregas ordenado
-    for truck in range(1, quantidade_de_caminhões + 1):
-        print(f"\nCriando o roteiro de entregas para o caminhão {truck}...")
+    route = {}  # Rota vazia para iniciar
 
-        # Chama a função que cria a rota e organiza os clientes não atendidos
-        route, client_not_served = make_route.make_best_routes(client_not_served, 
-                                                            "Rua Orlando Odilio Koerich, SN Galpão II - Picadas do Sul, São José - SC, 88102-106")
-        
-        # Se for o caminhão 1, adiciona os clientes especiais à rota
-        if truck == 1:
-            route, client_not_served = make_route.exceptions(route, client_not_served, special_clients)
-            print(f"Clientes especiais adicionados ao caminhão {truck}.")
+    # Iterar sobre a quantidade de caminhões
+    for truck_number in range(1, quantidade_de_caminhões + 1):
+        print(f"\nCriando o roteiro de entregas para o caminhão {truck_number}...")
+
+        # Procurar o caminhão correspondente nos dados de trucks_data
+        truck_data = next((t for t in trucks_data if t["Numero Equipe"] == truck_number), None)
+
+        if truck_data:
+            # Extrair e processar o volume do caminhão
+            raw_volume = truck_data.get("volume", "0m³").replace("m³", "").replace(",", ".")
+
+            try:
+                truck_volume = float(raw_volume)
+                print(f"Volume do caminhão {truck_number}: {truck_volume} m³")
+            except ValueError:
+                print(f"Erro ao converter o volume: {raw_volume}. Valor padrão 0m³ será utilizado.")
+                truck_volume = 0  # Caso ocorra um erro, definir o volume como 0
+
+            print(f"Volume do caminhão {truck_number}: {truck_volume} m³")
+
+            # Criar a rota inicial
+            route, client_not_served = make_route.make_best_routes(
+                client_not_served,
+                "Rua Orlando Odilio Koerich, SN Galpão II - Picadas do Sul, São José - SC, 88102-106",
+                truck_volume
+            )
+
+            # Se for o caminhão da equipe 1, adicionar clientes especiais
+            if truck_data["Numero Equipe"] == 1:
+                route, client_not_served = make_route.exceptions(route, client_not_served, special_clients, truck_volume)
+                print(f"Clientes especiais adicionados ao caminhão {truck_number}.")
+            else:
+                print(f"Roteiro do caminhão {truck_number} gerado sem clientes especiais.")
+
+            # Salvar o roteiro e demais arquivos
+            with open(f"Data/route_truck{truck_number}.json", "w") as file:
+                json.dump(route, file, indent=4)
+            print(f"Roteiro de entregas do caminhão {truck_number} salvo em 'route_truck{truck_number}.json'.")
+
+            with open("Data/clientes_nao_atendidos.json", "w") as f:
+                json.dump(client_not_served, f, indent=4)
+            print("Clientes não atendidos salvos em 'clientes_nao_atendidos.json'.")
+
+            export.create_pdf(
+                routes=route,
+                truck_number=truck_number,
+                truck_size=trucks_data,
+                output_file=f"Data/roteiro_entregas_caminhão{truck_number}.pdf"
+            )
+            print(f"PDF gerado com sucesso: 'roteiro_entregas_caminhão{truck_number}.pdf'.")
+
+            export.create_xlsx(route, output_file=f"Data/roteiro_entregas_caminhão{truck_number}.xlsx")
+            print(f"Arquivo Excel gerado com sucesso: 'roteiro_entregas_caminhão{truck_number}.xlsx'.")
+
+            export.create_links_txt(route, f"Data/roteiro_entregas_caminhão{truck_number}.txt")
+            print(f"Link da rota salvo em 'roteiro_entregas_caminhão{truck_number}.txt'.")
         else:
-            print(f"Roteiro do caminhão {truck} gerado sem clientes especiais.")  # Para caminhões 2 e 3
+            print(f"Dados para o caminhão {truck_number} não encontrados em trucks_data.")
 
-        # Salva o roteiro gerado em um arquivo JSON para o caminhão atual
-        print(f"Salvando o roteiro de entregas do caminhão {truck} em JSON...")
-        with open(f"Data/route_truck{truck}.json", "w") as file:
-            json.dump(route, file, indent=4)
-        print(f"Roteiro de entregas do caminhão {truck} salvo em 'route_truck{truck}.json'.")
-
-        # Salva os clientes não atendidos em um arquivo JSON
-        print("Salvando os clientes não atendidos em JSON...")
-        with open("Data/clientes_nao_atendidos.json", "w") as f:
-            json.dump(client_not_served, f, indent=4)
-        print("Clientes não atendidos salvos em 'clientes_nao_atendidos.json'.")
-
-        try:
-            print("Tentando carregar caminhões.json...")
-            truck_size_data = export.load_truck_data("Data/caminhoes.json")
-            print("Dados de caminhões carregados:", truck_size_data)
-        except Exception as e:
-            print(f"Erro ao carregar caminhões.json: {e}")
-
-        # Gerar o PDF do roteiro de entregas para o caminhão atual
-        print(f"Gerando o PDF para o caminhão {truck}...")
-        export.create_pdf(routes=route, truck_number=truck, truck_size=truck_size_data, output_file=f"Data/roteiro_entregas_caminhão{truck}.pdf")
-        print(f"PDF gerado com sucesso: 'roteiro_entregas_caminhão{truck}.pdf'.")
-
-        # Cria um arquivo Excel com o roteiro do caminhão atual
-        print(f"Gerando o arquivo Excel do roteiro de entregas do caminhão {truck}...")
-        export.create_xlsx(route, output_file=f"Data/roteiro_entregas_caminhão{truck}.xlsx")
-        print(f"Arquivo Excel gerado com sucesso: 'roteiro_entregas_caminhão{truck}.xlsx'.")
-
-        # Adiciona a funcionalidade para exportar a rota como link do Google Maps
-        print(f"Gerando o arquivo de texto com o link da rota para o caminhão {truck}...")
-        export.create_links_txt(route, f"Data/roteiro_entregas_caminhão{truck}.txt")
-        print(f"Link da rota salvo em 'roteiro_entregas_caminhão{truck}.txt'.")
 else:
     print("Os arquivos já são iguais. Nenhuma ação foi necessária.")
 
