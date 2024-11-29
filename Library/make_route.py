@@ -179,7 +179,7 @@ def make_best_routes(grouped_clients, starting_point, truck_volume):
                 "status": "Retorno ao ponto de partida",
                 "posicao_entrega": len(route_afternoon) + 1
             })
-            daily_route["tarde"].extend(route_afternoon)
+                daily_route["tarde"].extend(route_afternoon)
 
             routes[delivery_date] = daily_route
 
