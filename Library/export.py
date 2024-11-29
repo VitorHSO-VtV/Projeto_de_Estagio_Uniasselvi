@@ -5,6 +5,7 @@ from openpyxl.styles import Alignment, Font
 from Library import group_sheet, get_sheet
 import json
 import urllib.parse
+import numpy as np
 
 # Função para carregar as informações dos caminhões do arquivo JSON
 def load_truck_data(filename='./Data/caminhões.json'):
@@ -18,7 +19,6 @@ def load_truck_data(filename='./Data/caminhões.json'):
         print(f"Erro ao carregar o arquivo {filename}: {e}")
         return {}
 
-# Função para criar o PDF das rotas
 def create_pdf(routes, truck_number, truck_size, output_file='roteiro_entregas.pdf'):
     # Cria o PDF com as rotas
     pdf = FPDF()
@@ -26,7 +26,7 @@ def create_pdf(routes, truck_number, truck_size, output_file='roteiro_entregas.p
 
     def safe_value(value):
         """Trata valores nulos ou NaN para evitar erros."""
-        if value is None or value != value:  # Verifica se é None ou NaN
+        if pd.isna(value) or value is None:
             return 'Sem informações'
         return str(value)
 
@@ -35,11 +35,11 @@ def create_pdf(routes, truck_number, truck_size, output_file='roteiro_entregas.p
     # Obtém o volume do caminhão com base no número
     truck_key = f"CAMINHÃO {truck_number}"  # Exemplo: "CAMINHÃO 1"
 
-    # Procurando o caminhão correto na lista de caminhões
-    truck_data = next((t for t in truck_size if t["TAMANHO CAMINHÃO "] == truck_key), None)
+    # Procurando o caminhão correto no dicionário de tamanhos de caminhões
+    truck_data = truck_size.get(truck_key, None)
 
     if truck_data:
-        truck_volume = truck_data.get("volume", "Desconhecido")  # Busca o volume do caminhão
+        truck_volume = truck_data  # O volume é diretamente o valor da chave
     else:
         truck_volume = "Desconhecido"  # Se o caminhão não for encontrado, atribui "Desconhecido"
 
@@ -77,11 +77,14 @@ def create_pdf(routes, truck_number, truck_size, output_file='roteiro_entregas.p
 
                 pdf.cell(200, 10, txt=f"Parada {idx}", ln=True)
 
+                # Validação e conversão de 'Medida Sofá'
                 sofa_measure = client.get('Medida Sofá', '').strip()
-                if sofa_measure.isdigit():  # Verifica se é numérico
-                    sofa_measure = round(float(sofa_measure) * 0.1, 2)
-                else:
-                    print(f"Valor inesperado para 'Medida Sofá': {sofa_measure}")
+                try:
+                    if sofa_measure.isdigit():  # Verifica se é numérico
+                        sofa_measure = round(float(sofa_measure) * 0.1, 2)
+                    else:
+                        sofa_measure = "Valor inválido"
+                except ValueError:
                     sofa_measure = "Valor inválido"
 
                 client_info = (
@@ -109,7 +112,7 @@ def create_xlsx(routes, output_file='roteiro_entregas.xlsx'):
     data_for_export = []
 
     def safe_value(value):
-        if value is None or value != value:  # Verifica se é NaN
+        if pd.isna(value) or value is None:
             return 'Sem informações'
         return str(value)
 
@@ -144,16 +147,9 @@ def create_xlsx(routes, output_file='roteiro_entregas.xlsx'):
 
     # Ajusta as larguras das colunas
     for col in ws.columns:
-        max_length = 0
-        column = col[0].column_letter
-        for cell in col:
-            try:
-                if len(str(cell.value)) > max_length:
-                    max_length = len(cell.value)
-            except:
-                pass
+        max_length = max(len(str(cell.value)) for cell in col)  # Melhor forma de calcular a largura
         adjusted_width = (max_length + 2)
-        ws.column_dimensions[column].width = adjusted_width
+        ws.column_dimensions[col[0].column_letter].width = adjusted_width
 
     # Alinha as células da planilha
     for row in ws.iter_rows(min_row=2, max_row=ws.max_row, min_col=1, max_col=ws.max_column):

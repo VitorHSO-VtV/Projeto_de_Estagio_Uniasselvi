@@ -37,6 +37,8 @@ df_novo = pd.read_excel(arquivo_novo)
 with open("Data/caminhoes.json", "r") as file:
     trucks_data = json.load(file)
 
+truck_size_data = export.load_truck_data("Data/caminhoes.json")
+
 # Verificar se os arquivos são iguais
 if not df_existente.equals(df_novo):
     # Substituir o conteúdo do arquivo existente pelo novo
@@ -85,12 +87,6 @@ if not df_existente.equals(df_novo):
                 truck_volume
             )
 
-            # Se for o caminhão da equipe 1, adicionar clientes especiais
-            if truck_data["Numero Equipe"] == 1:
-                route, client_not_served = make_route.exceptions(route, client_not_served, special_clients, truck_volume)
-                print(f"Clientes especiais adicionados ao caminhão {truck_number}.")
-            else:
-                print(f"Roteiro do caminhão {truck_number} gerado sem clientes especiais.")
 
             # Salvar o roteiro e demais arquivos
             with open(f"Data/route_truck{truck_number}.json", "w") as file:
@@ -104,7 +100,7 @@ if not df_existente.equals(df_novo):
             export.create_pdf(
                 routes=route,
                 truck_number=truck_number,
-                truck_size=trucks_data,
+                truck_size=truck_size_data,
                 output_file=f"Data/roteiro_entregas_caminhão{truck_number}.pdf"
             )
             print(f"PDF gerado com sucesso: 'roteiro_entregas_caminhão{truck_number}.pdf'.")
@@ -123,11 +119,11 @@ else:
     # Gera os PDFs caso as rotas já estejam prontas
     print("\nRegenerando os PDFs e arquivos Excel para os caminhões...")
 
-    for truck in range(1, quantidade_de_caminhões + 1):
-        print(f"\nAbrindo o arquivo JSON do caminhão {truck}...")
+    for truck_number in range(1, quantidade_de_caminhões + 1):
+        print(f"\nAbrindo o arquivo JSON do caminhão {truck_number}...")
 
         # Abrir o arquivo JSON do caminhão atual e carregar as rotas
-        with open(f"Data/route_truck{truck}.json", 'r') as f:
+        with open(f"Data/route_truck{truck_number}.json", 'r') as f:
             route = json.load(f)  # Carrega o conteúdo do arquivo JSON de rotas
         
         try:
@@ -137,19 +133,21 @@ else:
         except Exception as e:
             print(f"Erro ao carregar caminhões.json: {e}")
 
-        # Gerar o PDF do roteiro de entregas para o caminhão atual
-        print(f"Gerando o PDF para o caminhão {truck}...")
-        export.create_pdf(routes=route, truck_number=truck, truck_size=truck_size_data, output_file=f"Data/roteiro_entregas_caminhão{truck}.pdf")
-        print(f"PDF gerado com sucesso: 'roteiro_entregas_caminhão{truck}.pdf'.")
+            export.create_pdf(
+                routes=route,
+                truck_number=truck_number,
+                truck_size=truck_size_data,
+                output_file=f"Data/roteiro_entregas_caminhão{truck_number}.pdf"
+            )
+            print(f"PDF gerado com sucesso: 'roteiro_entregas_caminhão{truck_number}.pdf'.")
 
-        # Gerar o arquivo Excel para o caminhão atual
-        print(f"Gerando o arquivo Excel para o caminhão {truck}...")
-        export.create_xlsx(route, output_file=f"Data/roteiro_entregas_caminhão{truck}.xlsx")
-        print(f"Arquivo Excel gerado com sucesso: 'roteiro_entregas_caminhão{truck}.xlsx'.")
+            export.create_xlsx(route, output_file=f"Data/roteiro_entregas_caminhão{truck_number}.xlsx")
+            print(f"Arquivo Excel gerado com sucesso: 'roteiro_entregas_caminhão{truck_number}.xlsx'.")
 
-        # Adiciona a funcionalidade para exportar a rota como link do Google Maps
-        print(f"Gerando o arquivo de texto com o link da rota para o caminhão {truck}...")
-        export.create_links_txt(route, f"Data/roteiro_entregas_caminhão{truck}.txt")
-        print(f"Link da rota salvo em 'roteiro_entregas_caminhão{truck}.txt'.")
+            export.create_links_txt(route, f"Data/roteiro_entregas_caminhão{truck_number}.txt")
+            print(f"Link da rota salvo em 'roteiro_entregas_caminhão{truck_number}.txt'.")
+        else:
+            print(f"Dados para o caminhão {truck_number} não encontrados em trucks_data.")
+
 
 print("\nProcesso completo de criação de rotas, geração de arquivos e exportação finalizado!")

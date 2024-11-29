@@ -3,8 +3,7 @@ import pandas as pd
 from datetime import timedelta, datetime
 import json
 
-# Função para obter a duração da viagem entre dois locais
-def get_travel_time(origin, destination):
+def get_travel_time_and_distance(origin, destination):
     url = "https://maps.googleapis.com/maps/api/directions/json"
     params = {
         'origin': origin,
@@ -22,9 +21,12 @@ def get_travel_time(origin, destination):
             # Verifica se a API retornou uma resposta OK
             if data['status'] == 'OK':
                 # Extrai a duração da viagem em segundos e converte para minutos
-                duration_value = data['routes'][0]['legs'][0]['duration']['value'] / 60  # duração em minutos
-                print(f"\033[32mDuração da viagem entre {origin} e {destination}: {duration_value:.2f} minutos.\033[0m")
-                return duration_value
+                duration_value = data['routes'][0]['legs'][0]['duration']['value'] / 60  # Duração em minutos
+                # Extrai a distância da viagem em metros e converte para quilômetros
+                distance_value = data['routes'][0]['legs'][0]['distance']['value'] / 1000  # Distância em quilômetros
+
+                print(f"\033[32mViagem entre {origin} e {destination}: {duration_value:.2f} minutos, {distance_value:.2f} km.\033[0m")
+                return duration_value, distance_value
             else:
                 # Caso a API retorne um status diferente de OK
                 print(f"\033[33mAviso: API retornou status {data['status']} para a solicitação de {origin} a {destination}.\033[0m")
@@ -37,9 +39,7 @@ def get_travel_time(origin, destination):
         print(f"\033[31mErro na requisição para {origin} a {destination}: {e}\033[0m")
 
     # Retorna None se não houver uma duração válida
-    return None
-
-
+    return None, None
 
 def make_best_routes(grouped_clients, starting_point, truck_volume):
     routes = {}
@@ -49,22 +49,26 @@ def make_best_routes(grouped_clients, starting_point, truck_volume):
     today = datetime.now()
     dates = [(today + timedelta(days=i)).strftime("%d/%m/%Y") for i in range(3)]
 
-    # Função auxiliar para organizar entregas por sessão
-    def organize_route_for_session(session_time, unvisited_clients, current_location, accumulated_time, accumulated_volume):
+    def organize_route_for_session(session_time, unvisited_clients, current_location, accumulated_time, accumulated_volume, last_best_cost_benefit):
         route = []
         session_time_limit = session_time  # Tempo limite em minutos
+        accumulated_travel_distance = 0  # Distância acumulada (reiniciada em cada sessão)
+        
+        # Reiniciar last_best_cost_benefit em cada turno
+        last_best_cost_benefit = 0  # Reinicia ao começar uma nova sessão
 
         while unvisited_clients:
             nearest_client = None
-            shortest_time = float('inf')
-            travel_time = make_time = 0
+            best_cost_benefit = float('-inf')  # Para encontrar o melhor custo-benefício
+            shortest_time = float('inf')  # Inicialize com um valor alto
+            travel_time = make_time = travel_distance = 0
 
             for client in unvisited_clients:
                 try:
                     order_number = client.get('N° de pedido', 'Desconhecido')
-                    client_volume = float(client.get('Volume M\u00b3', 0)) * 0.01  # Obter volume do cliente
+                    client_volume = float(client.get('Volume M\u00b3', 0)) * 0.01  # Volume em m³
                     if accumulated_volume + client_volume > truck_volume:
-                        continue  # Pula o cliente se exceder o volume do caminhão
+                        continue  # Pule se exceder o volume do caminhão
 
                     if 'endereco' in client and pd.notna(client['endereco']):
                         client_address = client['endereco']
@@ -72,53 +76,64 @@ def make_best_routes(grouped_clients, starting_point, truck_volume):
                             print(f"\033[31mErro: Pedido nº {order_number} - Endereço inconsistente ou ausente.\033[0m")
                             continue
 
-                        # Obtenha o tempo de montagem e o tempo de viagem
+                        # Obtenha o tempo de montagem, tempo e distância de viagem
                         make_time = float(client.get('Tempo de montagem/entrega', 0))
-                        travel_time = get_travel_time(current_location, client_address)
-                        if travel_time is None:
+                        travel_time, travel_distance = get_travel_time_and_distance(current_location, client_address)
+                        if travel_time is None or travel_distance is None:
                             continue
 
-                        # Tempo total gasto com o cliente (viagem + montagem)
-                        total_client_time = travel_time + make_time
+                        # Atualizar a distância acumulada
+                        next_distance = accumulated_travel_distance + travel_distance
 
+                        # Calcular tempo total e custo-benefício (número de clientes / distância acumulada)
+                        total_client_time = travel_time + make_time
+                        cost_benefit = (next_distance if next_distance > 0 else 1) / (len(route) + 1)
+
+                        # Escolha o cliente com maior custo-benefício ou menor tempo total
                         if total_client_time < shortest_time:
                             nearest_client = client
+                            best_cost_benefit = cost_benefit
                             shortest_time = total_client_time
                             shortest_make_time = make_time
                             shortest_travel_time = travel_time
-                            nearest_client_volume = client_volume
+                            shortest_travel_distance = travel_distance
+                            nearest_client_volume = client_volume       
                 except Exception as e:
                     print(f"\033[31mErro ao processar cliente: {e}\033[0m")
 
-            print(f"Acc. Time: {accumulated_time}, Shortest Time: {shortest_time}, Session Time Limit: {session_time_limit}, Shortest Travel Time: {shortest_travel_time}")
-
-            # Permitir ultrapassar horário se a viagem for curta
+            # Condição para adicionar o cliente à rota
             if nearest_client and (
-                (accumulated_time + shortest_time) <= session_time_limit or  # Condição padrão: tempo total dentro do limite da sessão
-                (shortest_travel_time <= 20 and (accumulated_time + shortest_time) <= session_time_limit + 120)  # Tolerância de 2 horas se o tempo de viagem for <= 20 minutos
+                (accumulated_time + shortest_travel_time + shortest_make_time) <= session_time_limit or
+                (best_cost_benefit <= last_best_cost_benefit + 1 and (accumulated_time + shortest_travel_time + shortest_make_time) <= session_time_limit + 240)
             ):
-                # Atualiza o tempo e volume acumulados
-                accumulated_time += shortest_time
+                # Atualize a lógica para adicionar o cliente
+                accumulated_time += shortest_travel_time + shortest_make_time
                 accumulated_volume += nearest_client_volume
+                accumulated_travel_distance += shortest_travel_distance  # Atualização correta da distância acumulada
 
-                # Adiciona todos os dados do cliente à rota
                 route.append({
-                    **nearest_client,  # Inclui todos os dados do cliente diretamente
+                    **nearest_client,
+                    "distancia_acumulada": accumulated_travel_distance,  # Usando a variável correta
+                    "custo_beneficio": best_cost_benefit,
                     "tempo_de_viagem": shortest_travel_time,
+                    "distancia_de_viagem_km": shortest_travel_distance,
                     "tempo_de_montagem": shortest_make_time,
-                    "tempo_total_cliente": shortest_time,
+                    "tempo_total_cliente": shortest_travel_time + shortest_make_time,
                     "tempo_total_acumulado": accumulated_time,
                     "volume_acumulado": accumulated_volume,
                     "status": "Pendente",
                     "posicao_entrega": len(route) + 1
                 })
+                
+                # Atualize a variável last_best_cost_benefit para o cliente atual
+                last_best_cost_benefit = best_cost_benefit
 
                 unvisited_clients.remove(nearest_client)
                 current_location = nearest_client['endereco']
             else:
-                break  # Encerra a sessão se o tempo restante for insuficiente ou volume excedido
+                break
 
-        return route, unvisited_clients, current_location, accumulated_time, accumulated_volume
+        return route, unvisited_clients, current_location, accumulated_time, accumulated_volume, last_best_cost_benefit
 
     # Criar rotas para cada dia
     for delivery_date in dates:
@@ -141,15 +156,16 @@ def make_best_routes(grouped_clients, starting_point, truck_volume):
             # Manhã: 8:30 - 12:00
             session_time = 240  # 4 horas em minutos
             print(f"\033[34mIniciando sessão da manhã para {delivery_date}.\033[0m")
-            route_morning, unvisited_clients, last_location, accumulated_time, accumulated_volume = organize_route_for_session(
-                session_time, unvisited_clients, starting_point, accumulated_time, accumulated_volume
+            route_morning, unvisited_clients, last_location, accumulated_time, accumulated_volume, last_best_cost_benefit = organize_route_for_session(
+                session_time, unvisited_clients, starting_point, accumulated_time, accumulated_volume, 0  # Reiniciando o valor em cada turno
             )
-            travel_time_return = get_travel_time(last_location, starting_point)
+            travel_time_return, travel_distance_return = get_travel_time_and_distance(last_location, starting_point)
             route_morning.append({
                 "endereco": starting_point,
                 "cliente": "Ponto de Partida",
                 "pedido": "Retorno",
                 "tempo_de_viagem": travel_time_return,
+                "distancia_de_viagem_km": travel_distance_return,
                 "tempo_de_montagem": 0,  # Sem tempo de montagem no retorno
                 "tempo_total_cliente": travel_time_return,
                 "tempo_total_acumulado": accumulated_time + travel_time_return,
@@ -163,15 +179,16 @@ def make_best_routes(grouped_clients, starting_point, truck_volume):
             session_time = 240  # 4 horas em minutos
             accumulated_time = 0  # Zera o tempo acumulado ao iniciar a tarde
             print(f"\033[34mIniciando sessão da tarde para {delivery_date}.\033[0m")
-            route_afternoon, unvisited_clients, last_location, accumulated_time, accumulated_volume = organize_route_for_session(
-                session_time, unvisited_clients, starting_point, accumulated_time, accumulated_volume
+            route_afternoon, unvisited_clients, last_location, accumulated_time, accumulated_volume, last_best_cost_benefit = organize_route_for_session(
+                session_time, unvisited_clients, starting_point, accumulated_time, accumulated_volume, 0  # Reiniciando o valor em cada turno
             )
-            travel_time_return = get_travel_time(last_location, starting_point)
+            travel_time_return, travel_distance_return = get_travel_time_and_distance(last_location, starting_point)
             route_afternoon.append({
                 "endereco": starting_point,
                 "cliente": "Ponto de Partida",
                 "pedido": "Retorno",
                 "tempo_de_viagem": travel_time_return,
+                "distancia_de_viagem_km": travel_distance_return,
                 "tempo_de_montagem": 0,  # Sem tempo de montagem no retorno
                 "tempo_total_cliente": travel_time_return,
                 "tempo_total_acumulado": accumulated_time + travel_time_return,
@@ -179,7 +196,7 @@ def make_best_routes(grouped_clients, starting_point, truck_volume):
                 "status": "Retorno ao ponto de partida",
                 "posicao_entrega": len(route_afternoon) + 1
             })
-                daily_route["tarde"].extend(route_afternoon)
+            daily_route["tarde"].extend(route_afternoon)
 
             routes[delivery_date] = daily_route
 
@@ -189,20 +206,9 @@ def make_best_routes(grouped_clients, starting_point, truck_volume):
         # Organize clientes não atendidos no formato solicitado
         for client in unvisited_clients:
             delivery_date = client.get('Data Entrega', 'Desconhecido')
-            city = client.get('localidade', 'Desconhecido')
+            city = client.get('localidade', 'Desconhecida')
             district = client.get('bairro', 'Desconhecido')
-
-            if delivery_date not in client_not_served:
-                client_not_served[delivery_date] = {}
-
-            if city not in client_not_served[delivery_date]:
-                client_not_served[delivery_date][city] = {}
-
-            if district not in client_not_served[delivery_date][city]:
-                client_not_served[delivery_date][city][district] = []
-
-            # Adiciona todos os dados do cliente diretamente no dicionário
-            client_not_served[delivery_date][city][district].append(client)  # Mantemos o cliente apenas uma vez
+            client_not_served.setdefault(delivery_date, {}).setdefault(city, {}).setdefault(district, []).append(client)
 
     return routes, client_not_served
     
