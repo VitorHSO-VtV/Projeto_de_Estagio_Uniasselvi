@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotas Geradas</title>
+</head>
+<body>
+    <h1>Baixe as rotas abaixo</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+            {% for category, message in messages %}
+                <li style="color:red">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <ul>
+        {% for file in generated_files %}
+        <li>
+            <strong>Caminhão {{ file.truck_number }}</strong>:
+            <a href="{{ url_for('download', filename=file.pdf_path) }}">PDF</a> |
+            <a href="{{ url_for('download', filename=file.xlsx_path) }}">Excel</a> |
+            <a href="{{ url_for('download', filename=file.txt_path) }}">Links</a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <p>Total de Caminhões: {{ truck_count }}</p> <!-- Exibe o número de caminhões -->
+
+    <a href="/">Voltar</a>
+</body>
+</html>

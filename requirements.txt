@@ -3,3 +3,9 @@ gspread
 pandas
 openpyxl
 fpdf
+flask
+aiohttp
+asyncio
+threading
+os
+json

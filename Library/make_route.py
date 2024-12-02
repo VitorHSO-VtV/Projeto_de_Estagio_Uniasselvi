@@ -1,47 +1,58 @@
 import requests
 import pandas as pd
 from datetime import timedelta, datetime
-import json
 
 def get_travel_time_and_distance(origin, destination):
-    url = "https://maps.googleapis.com/maps/api/directions/json"
-    params = {
-        'origin': origin,
-        'destination': destination,
-        'key': "AIzaSyAiz3yZErbSg6BIfKfve8YmskYu46ekeTs",  # Substitua pela sua chave de API
-        'mode': 'driving'
+    url = "https://api.openrouteservice.org/v2/directions/driving-car"
+    headers = {
+        'Authorization': '5b3ce3597851110001cf62480004bdcd5c4d44619c293154bf1be576'  # Substitua pela sua chave de API
     }
-
+    # Convertendo os endereços para coordenadas geográficas
+    geocode_url = "https://api.openrouteservice.org/geocode/search"
+    geocode_params = {'api_key': headers['Authorization'], 'text': origin}
+    
     try:
-        response = requests.get(url, params=params)
-
-        # Verifica se a resposta da API foi bem-sucedida
-        if response.status_code == 200:
-            data = response.json()
-            # Verifica se a API retornou uma resposta OK
-            if data['status'] == 'OK':
-                # Extrai a duração da viagem em segundos e converte para minutos
-                duration_value = data['routes'][0]['legs'][0]['duration']['value'] / 60  # Duração em minutos
-                # Extrai a distância da viagem em metros e converte para quilômetros
-                distance_value = data['routes'][0]['legs'][0]['distance']['value'] / 1000  # Distância em quilômetros
-
-                print(f"\033[32mViagem entre {origin} e {destination}: {duration_value:.2f} minutos, {distance_value:.2f} km.\033[0m")
-                return duration_value, distance_value
-            else:
-                # Caso a API retorne um status diferente de OK
-                print(f"\033[33mAviso: API retornou status {data['status']} para a solicitação de {origin} a {destination}.\033[0m")
+        # Buscar coordenadas para o ponto de origem
+        response_origin = requests.get(geocode_url, params=geocode_params)
+        if response_origin.status_code == 200:
+            coords_origin = response_origin.json()['features'][0]['geometry']['coordinates']
         else:
-            # Se a resposta HTTP não for bem-sucedida
-            print(f"\033[31mErro na requisição para {origin} a {destination}. Código de status: {response.status_code}.\033[0m")
+            print(f"Erro ao obter coordenadas de {origin}: {response_origin.status_code}")
+            return None, None
+
+        # Buscar coordenadas para o ponto de destino
+        geocode_params['text'] = destination
+        response_destination = requests.get(geocode_url, params=geocode_params)
+        if response_destination.status_code == 200:
+            coords_destination = response_destination.json()['features'][0]['geometry']['coordinates']
+        else:
+            print(f"Erro ao obter coordenadas de {destination}: {response_destination.status_code}")
+            return None, None
+
+        # Fazer a requisição de rota
+        params = {
+            'start': f"{coords_origin[0]},{coords_origin[1]}",
+            'end': f"{coords_destination[0]},{coords_destination[1]}"
+        }
+        response_route = requests.get(url, headers=headers, params=params)
+        
+        if response_route.status_code == 200:
+            data = response_route.json()
+            # Extrair tempo e distância
+            duration_value = data['features'][0]['properties']['segments'][0]['duration'] / 60  # em minutos
+            distance_value = data['features'][0]['properties']['segments'][0]['distance'] / 1000  # em quilômetros
+            
+            print(f"\033[32mViagem entre {origin} e {destination}: {duration_value:.2f} minutos, {distance_value:.2f} km.\033[0m")
+            return duration_value, distance_value
+        else:
+            print(f"\033[31mErro na solicitação de rota: {response_route.status_code}, de {origin} para {destination}\033[0m")
+            return None, None
 
     except requests.exceptions.RequestException as e:
-        # Caso ocorra uma exceção durante a requisição
-        print(f"\033[31mErro na requisição para {origin} a {destination}: {e}\033[0m")
+        print(f"\033[31mErro na requisição: {e}\033[0m")
+        return None, None
 
-    # Retorna None se não houver uma duração válida
-    return None, None
-
-def make_best_routes(grouped_clients, starting_point, truck_volume):
+def make_best_routes(grouped_clients, starting_point, truck_volume, tolerance_time = 240, limit_time = 240, benefit_coefficient = 1):
     routes = {}
     client_not_served = {}  # Dicionário para armazenar os clientes não atendidos
 
@@ -104,7 +115,7 @@ def make_best_routes(grouped_clients, starting_point, truck_volume):
             # Condição para adicionar o cliente à rota
             if nearest_client and (
                 (accumulated_time + shortest_travel_time + shortest_make_time) <= session_time_limit or
-                (best_cost_benefit <= last_best_cost_benefit + 1 and (accumulated_time + shortest_travel_time + shortest_make_time) <= session_time_limit + 240)
+                (best_cost_benefit <= last_best_cost_benefit + benefit_coefficient and (accumulated_time + shortest_travel_time + shortest_make_time) <= session_time_limit + tolerance_time)
             ):
                 # Atualize a lógica para adicionar o cliente
                 accumulated_time += shortest_travel_time + shortest_make_time
@@ -154,7 +165,7 @@ def make_best_routes(grouped_clients, starting_point, truck_volume):
         daily_route = {"manhã": [], "tarde": []}  # Dicionário para separar manhã e tarde
         try:
             # Manhã: 8:30 - 12:00
-            session_time = 240  # 4 horas em minutos
+            session_time = limit_time  # 4 horas em minutos
             print(f"\033[34mIniciando sessão da manhã para {delivery_date}.\033[0m")
             route_morning, unvisited_clients, last_location, accumulated_time, accumulated_volume, last_best_cost_benefit = organize_route_for_session(
                 session_time, unvisited_clients, starting_point, accumulated_time, accumulated_volume, 0  # Reiniciando o valor em cada turno
@@ -176,7 +187,7 @@ def make_best_routes(grouped_clients, starting_point, truck_volume):
             daily_route["manhã"].extend(route_morning)
 
             # Tarde: 13:30 - 17:00
-            session_time = 240  # 4 horas em minutos
+            session_time = limit_time  # 4 horas em minutos
             accumulated_time = 0  # Zera o tempo acumulado ao iniciar a tarde
             print(f"\033[34mIniciando sessão da tarde para {delivery_date}.\033[0m")
             route_afternoon, unvisited_clients, last_location, accumulated_time, accumulated_volume, last_best_cost_benefit = organize_route_for_session(

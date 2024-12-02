@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações</title>
+</head>
+<body>
+    <h1>Configurações</h1>
+    <form action="/config" method="post">
+        <label>Tempo de Tolerância:</label>
+        <input type="number" name="tolerance_time" value="{{ config.tolerance_time }}"><br>
+        <label>Tempo Limite por Turno:</label>
+        <input type="number" name="limit_time" value="{{ config.limit_time }}"><br>
+        <label>Coeficiente de Custo Benefício:</label>
+        <input type="text" name="benefit_coefficient" value="{{ config.benefit_coefficient }}"><br>
+        <label>Quantidade de Caminhões:</label>
+        <input type="number" name="truck_count" value="{{ config.truck_count }}"><br>
+        <button type="submit">Salvar</button>
+        <a href="/">Cancelar</a>
+    </form>
+</body>
+</html>
