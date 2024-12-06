@@ -18,6 +18,17 @@ if not os.path.exists(CONFIG_FILE):
             "truck_count": 3
         }, file, indent=4)
 
+# Configuração inicial
+NEW_CONFIG_FILE = "new_config.json"
+if not os.path.exists(NEW_CONFIG_FILE):
+    with open(NEW_CONFIG_FILE, "w") as file:
+        json.dump({
+            "tolerance_time": 10,
+            "limit_time": 60,
+            "benefit_coefficient": 1.5,
+            "truck_count": 3
+        }, file, indent=4)
+
 # Rota inicial
 @app.route("/")
 def index():
@@ -77,7 +88,7 @@ def calculate_routes():
         truck_size_data = export.load_truck_data("Data/caminhoes.json")
 
         # Carregar nova configuração (se necessário)
-        with open("Data/new_config.json", "r") as file:  # Exemplo de onde carregar new_config
+        with open(NEW_CONFIG_FILE, "r") as file:  # Exemplo de onde carregar new_config
             new_config = json.load(file)
         
         # Verificar se os arquivos são iguais
@@ -263,4 +274,4 @@ def download(filename):
     return send_file(filename, as_attachment=True)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(port= 8000, debug=True)
