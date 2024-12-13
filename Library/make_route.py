@@ -1,55 +1,68 @@
 import requests
 import pandas as pd
 from datetime import timedelta, datetime
+from geopy.distance import geodesic
+
+def get_coordinates_nominatim(address):
+    url = f"https://nominatim.openstreetmap.org/search"
+    params = {
+        'q': address,
+        'format': 'json',
+        'addressdetails': 1
+    }
+    try:
+        response = requests.get(url, params=params)
+        if response.status_code == 200:
+            data = response.json()
+            if data:
+                lat = float(data[0]['lat'])
+                lon = float(data[0]['lon'])
+                return lat, lon
+            else:
+                print(f"Endereço não encontrado: {address}")
+                return None
+        else:
+            print(f"Erro na solicitação para {address}: {response.status_code}")
+            return None
+    except requests.exceptions.RequestException as e:
+        print(f"Erro ao acessar Nominatim: {e}")
+        return None
+
+def get_route_osrm(start_coords, end_coords):
+    url = f"http://router.project-osrm.org/route/v1/driving/{start_coords[1]},{start_coords[0]};{end_coords[1]},{end_coords[0]}"
+    params = {"overview": "simplified"}
+    try:
+        response = requests.get(url, params=params)
+        if response.status_code == 200:
+            data = response.json()
+            if "routes" in data and data["routes"]:
+                duration = data['routes'][0]['duration'] / 60  # em minutos
+                distance = data['routes'][0]['distance'] / 1000  # em quilômetros
+                return duration, distance
+            else:
+                print("Nenhuma rota encontrada.")
+                return None, None
+        else:
+            print(f"Erro na solicitação de rota: {response.status_code}")
+            return None, None
+    except requests.exceptions.RequestException as e:
+        print(f"Erro ao acessar OSRM: {e}")
+        return None, None
 
 def get_travel_time_and_distance(origin, destination):
-    url = "https://api.openrouteservice.org/v2/directions/driving-car"
-    headers = {
-        'Authorization': '5b3ce3597851110001cf62480004bdcd5c4d44619c293154bf1be576'  # Substitua pela sua chave de API
-    }
-    # Convertendo os endereços para coordenadas geográficas
-    geocode_url = "https://api.openrouteservice.org/geocode/search"
-    geocode_params = {'api_key': headers['Authorization'], 'text': origin}
-    
-    try:
-        # Buscar coordenadas para o ponto de origem
-        response_origin = requests.get(geocode_url, params=geocode_params)
-        if response_origin.status_code == 200:
-            coords_origin = response_origin.json()['features'][0]['geometry']['coordinates']
-        else:
-            print(f"Erro ao obter coordenadas de {origin}: {response_origin.status_code}")
-            return None, None
+    coords_origin = get_coordinates_nominatim(origin)
+    coords_destination = get_coordinates_nominatim(destination)
 
-        # Buscar coordenadas para o ponto de destino
-        geocode_params['text'] = destination
-        response_destination = requests.get(geocode_url, params=geocode_params)
-        if response_destination.status_code == 200:
-            coords_destination = response_destination.json()['features'][0]['geometry']['coordinates']
+    if coords_origin and coords_destination:
+        duration, distance = get_route_osrm(coords_origin, coords_destination)
+        if duration is not None and distance is not None:
+            print(f"\033[32mViagem entre {origin} e {destination}: {duration:.2f} minutos, {distance:.2f} km.\033[0m")
+            return duration, distance
         else:
-            print(f"Erro ao obter coordenadas de {destination}: {response_destination.status_code}")
+            print("Não foi possível calcular a rota.")
             return None, None
-
-        # Fazer a requisição de rota
-        params = {
-            'start': f"{coords_origin[0]},{coords_origin[1]}",
-            'end': f"{coords_destination[0]},{coords_destination[1]}"
-        }
-        response_route = requests.get(url, headers=headers, params=params)
-        
-        if response_route.status_code == 200:
-            data = response_route.json()
-            # Extrair tempo e distância
-            duration_value = data['features'][0]['properties']['segments'][0]['duration'] / 60  # em minutos
-            distance_value = data['features'][0]['properties']['segments'][0]['distance'] / 1000  # em quilômetros
-            
-            print(f"\033[32mViagem entre {origin} e {destination}: {duration_value:.2f} minutos, {distance_value:.2f} km.\033[0m")
-            return duration_value, distance_value
-        else:
-            print(f"\033[31mErro na solicitação de rota: {response_route.status_code}, de {origin} para {destination}\033[0m")
-            return None, None
-
-    except requests.exceptions.RequestException as e:
-        print(f"\033[31mErro na requisição: {e}\033[0m")
+    else:
+        print("Coordenadas não encontradas para os endereços fornecidos.")
         return None, None
 
 def make_best_routes(grouped_clients, starting_point, truck_volume, tolerance_time = 240, limit_time = 240, benefit_coefficient = 1):

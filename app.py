@@ -1,4 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for, send_file, jsonify, flash
+from flask import Flask, render_template, request, redirect, url_for, send_file, jsonify
+from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget
+from PyQt5.QtWebEngineWidgets import QWebEngineView
+from PyQt5.QtCore import QUrl
+import threading
 from Library import export, get_sheet, group_sheet, make_route
 import pandas as pd
 import json
@@ -8,9 +12,20 @@ app = Flask(__name__)
 app.secret_key = "your_secret_key"  # Necessário para usar flash messages
 
 # Configuração inicial
-CONFIG_FILE = "config.json"
+CONFIG_FILE = "Data/config.json"
 if not os.path.exists(CONFIG_FILE):
     with open(CONFIG_FILE, "w") as file:
+        json.dump({
+            "tolerance_time": 10,
+            "limit_time": 60,
+            "benefit_coefficient": 1.5,
+            "truck_count": 3
+        }, file, indent=4)
+
+# Configuração inicial
+NEW_CONFIG_FILE = "Data/new_config.json"
+if not os.path.exists(NEW_CONFIG_FILE):
+    with open(NEW_CONFIG_FILE, "w") as file:
         json.dump({
             "tolerance_time": 10,
             "limit_time": 60,
@@ -117,7 +132,7 @@ def calculate_routes():
 
                 if truck_data:
                     # Extrair e processar o volume do caminhão
-                    raw_volume = truck_data.get("volume", "0m³").replace("m³", "").replace(",", ".")
+                    raw_volume = truck_data.get("volume", 0)
 
                     try:
                         truck_volume = float(raw_volume)
@@ -262,5 +277,38 @@ def config():
 def download(filename):
     return send_file(filename, as_attachment=True)
 
+# Função para rodar o Flask em uma thread separada
+def run_flask():
+    app.run(host='127.0.0.1', port=5000, debug=False, use_reloader=False)
+
+# Classe da janela PyQt5
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Roterização de sofás Habitato")
+        self.setGeometry(100, 100, 800, 600)
+
+        # Configura o WebEngineView para exibir a página Flask
+        self.browser = QWebEngineView()
+        self.browser.setUrl(QUrl("http://127.0.0.1:5000"))
+
+        # Layout para a janela
+        layout = QVBoxLayout()
+        layout.addWidget(self.browser)
+
+        container = QWidget()
+        container.setLayout(layout)
+        self.setCentralWidget(container)
+
+# Inicialização do PyQt5
 if __name__ == "__main__":
-    app.run(debug=True)
+    # Inicia o Flask em uma thread separada
+    flask_thread = threading.Thread(target=run_flask)
+    flask_thread.daemon = True
+    flask_thread.start()
+
+    # Inicializa a aplicação PyQt5
+    qt_app = QApplication([])
+    window = MainWindow()
+    window.show()
+    qt_app.exec_()

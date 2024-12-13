@@ -4,3 +4,7 @@ pandas
 openpyxl
 fpdf
 flask
+geopy
+pyqt5
+pyinstaller
+PyQtWebEngine

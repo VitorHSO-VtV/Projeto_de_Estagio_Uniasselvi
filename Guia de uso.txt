@@ -6,7 +6,7 @@ passo 3: clicar em instalar na extenção "Python"
 
 passo 4: voltar para o menu "Explorador"
 
-passo 5: usar o comando "python3 -m pip install --upgrade pip" no terminal para atualizar o instalador
+passo 5: usar o comando "python -m pip install --upgrade pip" no terminal para atualizar o instalador
 
 passo 6: usar o comando "pip install -r requirements.txt" no terminal para baixar todas as bibliotecas necessárias
 
