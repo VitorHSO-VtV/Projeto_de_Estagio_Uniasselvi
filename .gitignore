@@ -20,4 +20,5 @@ Data/route_truck1.json
 Data/route_truck2.json
 Data/route_truck3.json
 Data/clientes_nao_atendidos.json
-Library/__pycache__
+Library/__pycache__/
+Library/*.pyc
